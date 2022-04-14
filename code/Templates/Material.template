@@ -2,7 +2,7 @@
 
 Layer0
 {
-	shader "vr_simple.vfx"
+	shader "complex.vfx"
 
 	//---- Metalness ----
 	F_METALNESS_TEXTURE 1
