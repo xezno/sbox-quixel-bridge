@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using System.Text.Json;
+using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace BridgeForSbox;
 
@@ -118,14 +116,19 @@ public class BridgeImporter
 	{
 		// Create destination directories
 		Directory.CreateDirectory( location );
-		Directory.CreateDirectory( $"{location}/assets" );
 
-		void CopyAssets<T>( List<T> items, QuixelAsset asset ) where T : IBaseAsset
+		var assetLocation = $"{location}/assets";
+		Directory.CreateDirectory( assetLocation );
+
+		void CopyAssets<T>( List<T> items, QuixelAsset asset, string subDir ) where T : IBaseAsset
 		{
+			var joinedSubDir = $"{assetLocation}/{subDir}";
+			Directory.CreateDirectory( joinedSubDir );
+
 			for ( int i = 0; i < items.Count; i++ )
 			{
 				T item = items[i];
-				string destination = item.Path.Replace( asset.Path, $"{location}/assets" );
+				string destination = item.Path.Replace( asset.Path, joinedSubDir );
 
 				Directory.CreateDirectory( Path.GetDirectoryName( destination ) );
 				File.Copy( item.Path, destination, true );
@@ -137,9 +140,9 @@ public class BridgeImporter
 			}
 		}
 
-		CopyAssets( quixelAsset.Meshes, quixelAsset );
-		CopyAssets( quixelAsset.LODs, quixelAsset );
-		CopyAssets( quixelAsset.Textures, quixelAsset );
+		CopyAssets( quixelAsset.Meshes, quixelAsset, "meshes" );
+		CopyAssets( quixelAsset.LODs, quixelAsset, "meshes" );
+		CopyAssets( quixelAsset.Textures, quixelAsset, "textures" );
 
 		//
 		// Normalize paths and IDs
