@@ -1,4 +1,4 @@
-﻿namespace BridgeForSbox;
+﻿namespace QuixelBridge;
 
 public static class StringExtension
 {

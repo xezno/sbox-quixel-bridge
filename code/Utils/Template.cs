@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace BridgeForSbox;
+namespace QuixelBridge;
 
 /// <summary>
 /// Shitty simple template format parser
