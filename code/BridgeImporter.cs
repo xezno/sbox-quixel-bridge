@@ -63,7 +63,7 @@ public class BridgeImporter
 					for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 					{
 						Mesh mesh = quixelAsset.Meshes[i];
-						var mdlPath = Path.Join( relativePath, $"{quixelAsset.Id}_{i}.vmdl" )
+						var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}.vmdl" )
 							.Replace( "\\", "/" ); // s&box uses / as separator
 
 						var asset = Tools.AssetSystem.All.First( x => x.Path == mdlPath );
@@ -88,7 +88,15 @@ public class BridgeImporter
 		string dirName = new DirectoryInfo( quixelAsset.Path ).Name;
 		quixelAsset.DirectoryName = dirName;
 
-		location = $@"{ProjectPath}/{ExportDirectory}/{quixelAsset.Type}/{quixelAsset.DirectoryName.ToLower()}";
+		location = $@"{ProjectPath}/{ExportDirectory}/";
+		foreach ( var cat in quixelAsset.Categories )
+		{
+			if ( cat == "3d" || cat == "2d" )
+				continue;
+
+			location += $"{cat}/";
+		}
+		// location += $"{quixelAsset.DirectoryName.ToLower()}";
 
 		if ( !CopyFiles( ref quixelAsset, location ) )
 		{
@@ -156,20 +164,22 @@ public class BridgeImporter
 	{
 		var vmatLocation = $@"{quixelAsset.Path}/materials/";
 		Directory.CreateDirectory( vmatLocation );
-		vmatLocation += $"/{quixelAsset.Id}.vmat";
+		vmatLocation += $"/{quixelAsset.Name.ToPathString()}.vmat";
 
 		var baseVmat = new Template( "templates/Material.template" );
-		var pairs = new Dictionary<string, string>();
+		var pairs = new Dictionary<string, string>
+		{
+			//
+			// Defaults (colors)
+			//
+			{ "Diffuse", "[1.000000 1.000000 1.000000 0.000000]" },
+			{ "Normal", "[1.000000 1.000000 1.000000 0.000000]" },
+			{ "Roughness", "[1.000000 1.000000 1.000000 0.000000]" },
+			{ "AmbientOcclusion", "[1.000000 1.000000 1.000000 0.000000]" },
 
-		//
-		// Defaults (colors)
-		//
-		pairs.Add( "Diffuse", "[1.000000 1.000000 1.000000 0.000000]" );
-		pairs.Add( "Normal", "[1.000000 1.000000 1.000000 0.000000]" );
-		pairs.Add( "Roughness", "[1.000000 1.000000 1.000000 0.000000]" );
-		pairs.Add( "AmbientOcclusion", "[1.000000 1.000000 1.000000 0.000000]" );
-
-		pairs.Add( "Metallic", "[0.000000 0.000000 0.000000 0.000000]" );
+			// Metallic should be 0 by default
+			{ "Metallic", "[0.000000 0.000000 0.000000 0.000000]" }
+		};
 
 		// Get all used textures
 		quixelAsset.Textures.ForEach( texture =>
@@ -212,8 +222,8 @@ public class BridgeImporter
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatLocation = $"{quixelAsset.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' )}/materials/{quixelAsset.Id}.vmat";
-		string vmdlLocation = $@"{quixelAsset.Path}/{quixelAsset.Id}_{meshIndex}.vmdl";
+		var vmatLocation = $"{quixelAsset.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' )}/materials/{quixelAsset.Name.ToPathString()}.vmat";
+		string vmdlLocation = $@"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}.vmdl";
 
 		var lods = "";
 		var meshes = "";
