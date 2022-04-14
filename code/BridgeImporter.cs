@@ -14,6 +14,7 @@ public class BridgeImporter
 	public static string ExportDirectory { get; set; } = "megascans";
 	public static int ServerPort { get; set; } = 24981;
 	public static float Scale { get; set; } = 0.3937f;
+	public static float LodIncrement { get; set; } = 25.0f;
 	#endregion
 
 	private BridgeServer listener;
@@ -45,7 +46,7 @@ public class BridgeImporter
 			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
 				Mesh mesh = quixelAsset.Meshes[i];
-				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl" ).NormalizePath();
+				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" ).NormalizePath();
 
 				progressBar.SetSubtitle( "Compiling... (2/2)" );
 				progressBar.SetValues( 0.66f, 1.0f );
@@ -173,7 +174,7 @@ public class BridgeImporter
 	{
 		var vmatPath = $"{quixelAsset.Path}/materials/";
 		Directory.CreateDirectory( vmatPath );
-		vmatPath += $"/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
+		vmatPath += $"/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 
 		var baseVmat = new Template( "templates/Material.template" );
 		var pairs = new Dictionary<string, string>
@@ -231,12 +232,11 @@ public class BridgeImporter
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( ProjectPath )}/materials/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
-		var vmdlPath = $"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl";
+		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( ProjectPath )}/materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
+		var vmdlPath = $"{quixelAsset.Path}/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl";
 
-		var lods = "";
 		var meshes = "";
-		var lodCount = 0;
+		var lods = "";
 
 		var meshName = quixelAsset.Meshes[meshIndex].Name;
 
@@ -253,8 +253,8 @@ public class BridgeImporter
 			var baseLod = new Template( "templates/Lod.template" );
 			lods += baseLod.Parse( new()
 			{
-				{ "Threshold", (lodCount * 25).ToString() },
-				{ "Mesh", $"unnamed_{lodCount + 1}" }
+				{ "Threshold", (i * LodIncrement).ToString() },
+				{ "Mesh", $"unnamed_{i + 1}" }
 			} );
 
 			var baseMesh = new Template( "templates/Mesh.template" );
@@ -263,8 +263,6 @@ public class BridgeImporter
 				{ "Scale", Scale.ToString() },
 				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( ProjectPath ).NormalizePath() }
 			} );
-
-			lodCount++;
 		}
 
 		// Write vmdl

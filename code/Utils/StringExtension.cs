@@ -2,7 +2,11 @@
 
 public static class StringExtension
 {
-	public static string ToPathString( this string str )
+	/// <summary>
+	/// Convert to a "source-friendly" / "sbox-friendly" string
+	/// (separated with underscores, all lowercase)
+	/// </summary>
+	public static string ToSourceName( this string str )
 	{
 		var res = str;
 
