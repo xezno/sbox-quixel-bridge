@@ -38,49 +38,41 @@ public class BridgeImporter
 		listener.EndServer();
 	}
 
-	public async void ImportFrom( string jsonData )
+	public void ImportFrom( Progress.ProgressBar progressBar, QuixelAsset quixelAsset )
 	{
-		var quixelAssets = JsonSerializer.Deserialize<QuixelAsset[]>( jsonData );
-
-		var asyncTask = async () =>
+		if ( ExportAsset( quixelAsset, out string location ) )
 		{
-			using var progress = Progress.Start( "Importing assets..." );
-			foreach ( QuixelAsset quixelAsset in quixelAssets )
+			var relativePath = Path.GetRelativePath( ProjectPath, location );
+
+			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
-				using var p = Progress.Bar( $"Importing {quixelAsset.Name}" );
-				p.SetValues( 0.0f, 1.0f );
-				p.SetSubtitle( "Importing from Quixel... (1/2)" );
-				await Task.Delay( 100 );
+				Mesh mesh = quixelAsset.Meshes[i];
+				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl" )
+					.Replace( "\\", "/" ); // s&box uses / as separator
 
-				if ( ExportAsset( quixelAsset, out string location ) )
+				progressBar.SetSubtitle( "Compiling... (2/2)" );
+				progressBar.SetValues( 0.66f, 1.0f );
+
+				var asset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path == mdlPath );
+				if ( asset == null )
 				{
-					var relativePath = Path.GetRelativePath( ProjectPath, location );
-
-					p.SetValues( 0.5f, 1.0f );
-					p.SetSubtitle( "Compiling asset... (2/2)" );
-					await Task.Delay( 200 );
-
-					for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
-					{
-						Mesh mesh = quixelAsset.Meshes[i];
-						var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}.vmdl" )
-							.Replace( "\\", "/" ); // s&box uses / as separator
-
-						var asset = Tools.AssetSystem.All.First( x => x.Path == mdlPath );
-						asset.Compile( true ); // Force a full compile
-
-						Log.Trace( $"Exported to: {asset}" );
-						Log.Trace( $"TODO: Highlight in asset browser" );
-					}
+					Log.Warning( $"Couldn't find the asset that just got exported? Did it fail?" );
 				}
 				else
 				{
-					Log.Error( "Failed to export.\n" );
+					asset.Compile( true ); // Force a full compile
+					Log.Trace( $"Exported to: {asset}" );
+					Log.Trace( $"TODO: Highlight in asset browser" );
 				}
-			}
-		};
 
-		_ = asyncTask();
+				progressBar.SetSubtitle( "Done." );
+				progressBar.SetValues( 1.0f, 1.0f );
+			}
+		}
+		else
+		{
+			Log.Error( "Failed to export.\n" );
+		}
 	}
 
 	private bool ExportAsset( QuixelAsset quixelAsset, out string location )
@@ -164,7 +156,7 @@ public class BridgeImporter
 	{
 		var vmatLocation = $@"{quixelAsset.Path}/materials/";
 		Directory.CreateDirectory( vmatLocation );
-		vmatLocation += $"/{quixelAsset.Name.ToPathString()}.vmat";
+		vmatLocation += $"/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
 
 		var baseVmat = new Template( "templates/Material.template" );
 		var pairs = new Dictionary<string, string>
@@ -222,8 +214,8 @@ public class BridgeImporter
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatLocation = $"{quixelAsset.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' )}/materials/{quixelAsset.Name.ToPathString()}.vmat";
-		string vmdlLocation = $@"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}.vmdl";
+		var vmatLocation = $"{quixelAsset.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' )}/materials/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
+		string vmdlLocation = $@"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl";
 
 		var lods = "";
 		var meshes = "";

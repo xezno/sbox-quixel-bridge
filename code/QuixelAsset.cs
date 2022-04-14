@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace BridgeForSbox;
 
-struct QuixelAsset
+public struct QuixelAsset
 {
 	[JsonPropertyName( "resolution" )] public string Resolution { get; set; }
 	[JsonPropertyName( "resolutionValue" )] public int ResolutionValue { get; set; }
@@ -25,13 +25,13 @@ struct QuixelAsset
 	[JsonPropertyName( "meta" )] public List<MetaElement> Meta { get; set; }
 }
 
-interface IBaseAsset
+public interface IBaseAsset
 {
 	public string Path { get; set; }
 	public string Name { get; set; }
 }
 
-struct Texture : IBaseAsset
+public struct Texture : IBaseAsset
 {
 	[JsonPropertyName( "name" )] public string Name { get; set; }
 	[JsonPropertyName( "path" )] public string Path { get; set; }
@@ -40,7 +40,7 @@ struct Texture : IBaseAsset
 	[JsonPropertyName( "type" )] public string Type { get; set; }
 }
 
-struct Mesh : IBaseAsset
+public struct Mesh : IBaseAsset
 {
 	[JsonPropertyName( "path" )] public string Path { get; set; }
 	[JsonPropertyName( "name" )] public string Name { get; set; }
@@ -48,7 +48,7 @@ struct Mesh : IBaseAsset
 	[JsonPropertyName( "type" )] public string Type { get; set; }
 }
 
-struct MeshLOD : IBaseAsset
+public struct MeshLOD : IBaseAsset
 {
 	[JsonPropertyName( "lod" )] public string LOD { get; set; }
 	[JsonPropertyName( "path" )] public string Path { get; set; }
@@ -57,7 +57,7 @@ struct MeshLOD : IBaseAsset
 	[JsonPropertyName( "type" )] public string Type { get; set; }
 }
 
-struct PackedTextures : IBaseAsset
+public struct PackedTextures : IBaseAsset
 {
 	[JsonPropertyName( "name" )] public string Name { get; set; }
 	[JsonPropertyName( "path" )] public string Path { get; set; }
@@ -67,7 +67,7 @@ struct PackedTextures : IBaseAsset
 	[JsonPropertyName( "channelsData" )] public ChannelsData ChannelsData { get; set; }
 }
 
-struct ChannelsData
+public struct ChannelsData
 {
 	[JsonPropertyName( "Red" )] public ChannelInfo Red { get; set; }
 	[JsonPropertyName( "Green" )] public ChannelInfo Green { get; set; }
@@ -76,13 +76,13 @@ struct ChannelsData
 	[JsonPropertyName( "Grayscale" )] public ChannelInfo Grayscale { get; set; }
 }
 
-struct ChannelInfo
+public struct ChannelInfo
 {
 	[JsonPropertyName( "type" )] public string Type { get; set; }
 	[JsonPropertyName( "channel" )] public string Channel { get; set; }
 }
 
-struct MetaElement
+public struct MetaElement
 {
 	[JsonPropertyName( "value" )] public object Value { get; set; }
 	[JsonPropertyName( "name" )] public string Name { get; set; }
