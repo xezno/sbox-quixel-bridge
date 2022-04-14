@@ -24,4 +24,19 @@ SOFTWARE.
 
 ## Instructions
 
-TODO
+### Bridge Setup
+
+1. Open Quixel Bridge (update to latest version if it asks you to)
+2. Open "Edit" -> "Export Settings"
+3. Change "Export Target" to "Custom Socket Export"
+4. Open the "Textures" tab in Export Settings
+5. Select "TGA" as format (not actually necessary, but seems to be faster - PNG and JPG are both also compatible, but will
+compile slower)
+6. Exit out of "Export Settings"
+
+### s&box Setup
+
+1. Download this repo
+2. Extract it to your s&box addons/ folder under "Quixel.Bridge" (naming is important!)
+3. Add it through the s&box addon manager
+4. The "Quixel" menu should appear in the s&box editor. Click "Start Bridge Plugin" to open Bridge and start the plugin.
