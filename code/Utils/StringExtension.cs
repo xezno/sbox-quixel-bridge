@@ -12,12 +12,17 @@ public static class StringExtension
 		return res;
 	}
 
+	/// <summary>
+	/// Get relative path
+	/// </summary>
 	public static string PathRelativeTo( this string str, string relativePath )
 	{
 		return str.Replace( relativePath + "/", "" );
 	}
 
-	// s&box uses / as separator
+	/// <summary>
+	/// Normalize path so that it uses "/" as separating character
+	/// </summary>
 	public static string NormalizePath( this string str )
 	{
 		var res = str;
