@@ -38,15 +38,14 @@ public class BridgeImporter
 
 	public void ImportFrom( Progress.ProgressBar progressBar, QuixelAsset quixelAsset )
 	{
-		if ( ExportAsset( quixelAsset, out string location ) )
+		if ( ExportAsset( quixelAsset, out string path ) )
 		{
-			var relativePath = Path.GetRelativePath( ProjectPath, location );
+			var relativePath = Path.GetRelativePath( ProjectPath, path );
 
 			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
 				Mesh mesh = quixelAsset.Meshes[i];
-				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl" )
-					.Replace( "\\", "/" ); // s&box uses / as separator
+				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl" ).NormalizePath();
 
 				progressBar.SetSubtitle( "Compiling... (2/2)" );
 				progressBar.SetValues( 0.66f, 1.0f );
@@ -73,33 +72,48 @@ public class BridgeImporter
 		}
 	}
 
-	private bool ExportAsset( QuixelAsset quixelAsset, out string location )
+	private bool ExportAsset( QuixelAsset quixelAsset, out string path )
 	{
 		string dirName = new DirectoryInfo( quixelAsset.Path ).Name;
 		quixelAsset.DirectoryName = dirName;
 
-		location = $@"{ProjectPath}/{ExportDirectory}/";
-		foreach ( var cat in quixelAsset.Categories )
+		//
+		// Set location path
+		//
 		{
-			if ( cat == "3d" || cat == "2d" )
-				continue;
+			path = $"{ProjectPath}/{ExportDirectory}/";
+			foreach ( var cat in quixelAsset.Categories )
+			{
+				if ( cat == "3d" || cat == "2d" || cat == "surface" )
+					continue;
 
-			location += $"{cat}/";
+				path += $"{cat}/";
+			}
+
+			path = path.NormalizePath();
 		}
-		// location += $"{quixelAsset.DirectoryName.ToLower()}";
 
-		if ( !CopyFiles( ref quixelAsset, location ) )
+		//
+		// Copy files
+		//
+		if ( !CopyFiles( ref quixelAsset, path ) )
 		{
 			Log.Error( $"Failed to copy files!" );
 			return false;
 		}
 
+		//
+		// Create material
+		//
 		if ( !CreateMaterial( quixelAsset ) )
 		{
 			Log.Error( $"Failed to create material!" );
 			return false;
 		}
 
+		//
+		// Create meshes (multiple for some things e.g. grass)
+		//
 		for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 		{
 			if ( !CreateModel( quixelAsset, i ) )
@@ -112,17 +126,17 @@ public class BridgeImporter
 		return true;
 	}
 
-	private bool CopyFiles( ref QuixelAsset quixelAsset, string location )
+	private bool CopyFiles( ref QuixelAsset quixelAsset, string path )
 	{
 		// Create destination directories
-		Directory.CreateDirectory( location );
+		Directory.CreateDirectory( path );
 
-		var assetLocation = $"{location}/assets";
-		Directory.CreateDirectory( assetLocation );
+		var assetPath = $"{path}/assets";
+		Directory.CreateDirectory( assetPath );
 
 		void CopyAssets<T>( List<T> items, QuixelAsset asset, string subDir ) where T : IBaseAsset
 		{
-			var joinedSubDir = $"{assetLocation}/{subDir}";
+			var joinedSubDir = $"{assetPath}/{subDir}";
 			Directory.CreateDirectory( joinedSubDir );
 
 			for ( int i = 0; i < items.Count; i++ )
@@ -150,16 +164,16 @@ public class BridgeImporter
 		quixelAsset.Id = quixelAsset.Id.ToLower();
 		quixelAsset.Name = quixelAsset.Name.ToLower();
 		quixelAsset.DirectoryName = quixelAsset.DirectoryName.ToLower();
-		quixelAsset.Path = location;
+		quixelAsset.Path = path;
 
 		return true;
 	}
 
 	private static bool CreateMaterial( QuixelAsset quixelAsset )
 	{
-		var vmatLocation = $@"{quixelAsset.Path}/materials/";
-		Directory.CreateDirectory( vmatLocation );
-		vmatLocation += $"/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
+		var vmatPath = $"{quixelAsset.Path}/materials/";
+		Directory.CreateDirectory( vmatPath );
+		vmatPath += $"/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
 
 		var baseVmat = new Template( "templates/Material.template" );
 		var pairs = new Dictionary<string, string>
@@ -179,7 +193,7 @@ public class BridgeImporter
 		// Get all used textures
 		quixelAsset.Textures.ForEach( texture =>
 		{
-			var path = texture.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' );
+			var path = texture.Path.PathRelativeTo( ProjectPath ).NormalizePath();
 			switch ( texture.Type )
 			{
 				case "albedo":
@@ -203,22 +217,22 @@ public class BridgeImporter
 					// TODO
 					break;
 				default:
-					Console.WriteLine( $"Unsupported texture type '{texture.Type}', deleting" );
+					Log.Error( $"Unsupported texture type \"{texture.Type}\". Deleting." );
 					File.Delete( texture.Path );
 					break;
 			}
 		} );
 
 		// Write
-		File.WriteAllText( vmatLocation, baseVmat.Parse( pairs ) );
+		File.WriteAllText( vmatPath, baseVmat.Parse( pairs ) );
 
 		return true;
 	}
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatLocation = $"{quixelAsset.Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' )}/materials/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
-		string vmdlLocation = $@"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl";
+		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( ProjectPath )}/materials/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmat";
+		var vmdlPath = $"{quixelAsset.Path}/{quixelAsset.Name.ToPathString()}_{quixelAsset.Id}.vmdl";
 
 		var lods = "";
 		var meshes = "";
@@ -247,7 +261,7 @@ public class BridgeImporter
 			meshes += baseMesh.Parse( new()
 			{
 				{ "Scale", Scale.ToString() },
-				{ "Mesh", quixelAsset.LODs[i].Path.Replace( ProjectPath + "/", "" ).Replace( '\\', '/' ) }
+				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( ProjectPath ).NormalizePath() }
 			} );
 
 			lodCount++;
@@ -256,9 +270,9 @@ public class BridgeImporter
 		// Write vmdl
 		var vmdlBase = new Template( "templates/Model.template" );
 
-		File.WriteAllText( vmdlLocation, vmdlBase.Parse( new()
+		File.WriteAllText( vmdlPath, vmdlBase.Parse( new()
 		{
-			{ "Material", vmatLocation },
+			{ "Material", vmatPath },
 			{ "Lods", lods },
 			{ "Meshes", meshes }
 		} ) );
