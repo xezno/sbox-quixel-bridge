@@ -1,0 +1,34 @@
+﻿# Sandbox
+code/accesslist.txt
+Properties
+.intermediate
+*.csproj
+*.bat
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Oo]bj/
+.vs/
+
+# VRAD artifacts
+_bakeresourcecache/
+*_bakeresourcecache.vpk
+
+# Compiled files
+*.vanmgrph_c
+*.vmat_c
+*.vmdl_c
+*.vsnd_c
+*.vtex_c
+*.zip
+*.vpcf_c
+*.vpost_c
+
+# Allowlist
+!*_dev.vpk

@@ -1,0 +1,10 @@
+﻿{
+    _class = "RenderMeshFile"
+    filename = "<#= Mesh #>"
+    import_scale = <#= Scale #>
+    import_filter = 
+    {
+        exclude_by_default = false
+        exception_list = [  ]
+    }
+},
