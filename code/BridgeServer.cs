@@ -79,10 +79,12 @@ class BridgeServer
 				var progressBar = progressList[i];
 				progressBar.SetSubtitle( "Importing... (1/2)" );
 				progressBar.SetValues( 0.33f, 1.0f );
-				await Task.Delay( 100 );
+				await Task.Delay( 50 );
 
-				BridgeImporter.Instance.ImportFrom( progressBar, quixelAsset );
+				await BridgeImporter.Instance.ImportFrom( progressBar, quixelAsset );
 			}
+
+			await Task.Delay( 1000 ); // Give the user an extra second to see that we completed
 
 			progressList.ForEach( x => x.Dispose() );
 		};

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace QuixelBridge;
 
 public class BridgeImporter
 {
 	// TODO: Expose these
-	#region Properties
+	#region Options
 	public static string ProjectPath { get; set; } = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\megascans";
 	public static string ExportDirectory { get; set; } = "megascans";
 	public static int ServerPort { get; set; } = 24981;
@@ -37,7 +38,7 @@ public class BridgeImporter
 		listener.EndServer();
 	}
 
-	public void ImportFrom( Progress.ProgressBar progressBar, QuixelAsset quixelAsset )
+	public async Task ImportFrom( Progress.ProgressBar progressBar, QuixelAsset quixelAsset )
 	{
 		if ( ExportAsset( quixelAsset, out string path ) )
 		{
@@ -50,6 +51,7 @@ public class BridgeImporter
 
 				progressBar.SetSubtitle( "Compiling... (2/2)" );
 				progressBar.SetValues( 0.66f, 1.0f );
+				await Task.Delay( 50 );
 
 				var asset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path == mdlPath );
 				if ( asset == null )
