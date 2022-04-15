@@ -1,8 +1,11 @@
-﻿using Tools;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Text.Json;
+using Tools;
+
 /*
  * TODO:
  * - BUG: Figure out whether I was fucking up somewhere or whether SetStylesheetFile actually doesn't work
- * - Save settings to a file(!)
  * - Find a nice way to open a dialog and tell the user that their settings have been saved
  * - Clean everything up a little
  */
@@ -25,6 +28,7 @@ public class TestWindow : Window
 		MinimumSize = Size;
 		ResizeButtonsVisible = false;
 
+		Load();
 		CreateUI();
 		Show();
 	}
@@ -130,11 +134,42 @@ public class TestWindow : Window
 			BridgeImporter.ServerPort = int.Parse( serverPortEdit.Text );
 			BridgeImporter.Scale = float.Parse( scaleEdit.Text );
 			BridgeImporter.LodIncrement = float.Parse( lodIncrementEdit.Text );
+
+			Save();
 		};
 		buttons.Layout.Add( saveButton );
 
 		w.Layout.Add( buttons );
 		Canvas = w;
+	}
+
+	private static void Load()
+	{
+		if ( !File.Exists( "quixel_settings.json" ) )
+			return;
+
+		var jsonInput = File.ReadAllText( "quixel_settings.json" );
+		var dict = JsonSerializer.Deserialize<Dictionary<string, string>>( jsonInput );
+
+		BridgeImporter.ProjectPath = dict["ProjectPath"];
+		BridgeImporter.ExportDirectory = dict["ExportDirectory"];
+		BridgeImporter.ServerPort = int.Parse( dict["ServerPort"] );
+		BridgeImporter.Scale = float.Parse( dict["Scale"] );
+		BridgeImporter.LodIncrement = float.Parse( dict["LodIncrement"] );
+	}
+
+	private static void Save()
+	{
+		var dict = new Dictionary<string, string>();
+
+		dict["ProjectPath"] = BridgeImporter.ProjectPath;
+		dict["ExportDirectory"] = BridgeImporter.ExportDirectory;
+		dict["ServerPort"] = BridgeImporter.ServerPort.ToString();
+		dict["Scale"] = BridgeImporter.Scale.ToString();
+		dict["LodIncrement"] = BridgeImporter.LodIncrement.ToString();
+
+		var jsonOutput = JsonSerializer.Serialize( dict );
+		File.WriteAllText( "quixel_settings.json", jsonOutput );
 	}
 
 	[Sandbox.Event.Hotload]
