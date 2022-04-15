@@ -2,17 +2,19 @@
 using System.Reflection;
 using Tools;
 
+namespace QuixelBridge;
+
 public class PropertyRow : Widget
 {
-	DisplayInfo Info;
+	private DisplayInfo info;
+	private int labelWidth = 125;
 
-	int LabelWidth = 125;
-
-	public PropertyRow( Widget parent ) : base( parent )
+	public PropertyRow( Widget parent, int labelWidth = 125 ) : base( parent )
 	{
+		this.labelWidth = labelWidth;
+
 		SetLayout( LayoutMode.LeftToRight );
-		Layout.Margin = new( LabelWidth, 2, 8, 2 );
-		MinimumSize = 23;
+		Layout.Margin = new( labelWidth, 2, 0, 2 );
 	}
 
 	public PropertyRow( Widget parent, object target, string propertyName ) : this( parent )
@@ -30,21 +32,21 @@ public class PropertyRow : Widget
 
 	public void SetLabel( string text )
 	{
-		Info.Name = text;
+		info.Name = text;
 	}
 
 	public void SetLabel( PropertyInfo info )
 	{
-		Info = DisplayInfo.ForProperty( info );
+		this.info = DisplayInfo.ForProperty( info );
 	}
 
 	public T SetWidget<T>( T w ) where T : Widget
 	{
 		Layout.Add( w, 1 );
 
-		if ( Info.Placeholder != null && w is LineEdit e )
+		if ( info.Placeholder != null && w is LineEdit e )
 		{
-			e.PlaceholderText = Info.Placeholder;
+			e.PlaceholderText = info.Placeholder;
 		}
 
 		return w;
@@ -54,22 +56,18 @@ public class PropertyRow : Widget
 	{
 		base.OnPaint();
 
-		if ( string.IsNullOrEmpty( Info.Name ) )
+		if ( string.IsNullOrEmpty( info.Name ) )
 			return;
 
 		var size = new Rect( 0, Size );
-		size.width = LabelWidth - 16;
+
+		size.width = labelWidth;
+		size.left += 2;
 
 		if ( size.height > 28 )
 			size.height = 28;
 
-		size.left += 16;
 		Paint.SetDefaultFont();
-		Paint.SetPen( Theme.Grey.Lighten( 0.3f ) );
-		Paint.DrawText( size, Info.Name, TextFlag.RightCenter );
-
-		//	Paint.SetPen( Theme.Black.WithAlpha( 0.2f ) );
-		//	Paint.DrawLine( new Vector2( 0, size.bottom-1 ), new Vector2( Size.x, size.bottom-1 ) );
-
+		Paint.DrawText( size, info.Name, TextFlag.LeftCenter );
 	}
 }
