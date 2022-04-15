@@ -1,5 +1,11 @@
 ﻿using Tools;
-
+/*
+ * TODO:
+ * - BUG: Figure out whether I was fucking up somewhere or whether SetStylesheetFile actually doesn't work
+ * - Save settings to a file(!)
+ * - Find a nice way to open a dialog and tell the user that their settings have been saved
+ * - Clean everything up a little
+ */
 namespace QuixelBridge;
 
 [Tool( "Bridge Settings", "settings", "Settings for the Quixel Bridge plugin" )]
@@ -8,7 +14,6 @@ public class TestWindow : Window
 	[Menu( "Editor", "Quixel/Settings", "settings" )]
 	public static void OpenWindow()
 	{
-		Log.Info( "Open Window!" );
 		_ = new TestWindow();
 	}
 
@@ -33,16 +38,16 @@ public class TestWindow : Window
 		l.Text = label;
 		widget.Layout.Add( l );
 
-		var path = new LineEdit( value, parent );
-		path.SetStyles( "padding: 6px; background-color: #38393c; border-radius: 2px; " );
-		widget.Layout.Add( path, 1 );
+		var lineEdit = new LineEdit( value, parent );
+		lineEdit.SetStyles( "padding: 6px; background-color: #38393c; border-radius: 2px; " );
+		widget.Layout.Add( lineEdit, 1 );
 
 		if ( middle )
 			widget.SetStyles( "margin-left: 4px; margin-right: 4px;" );
 
 		parent.Layout.Add( widget );
 
-		return path;
+		return lineEdit;
 	}
 
 	private LineEdit AddDirectoryPicker( string label, Widget parent, string value = "" )
@@ -51,9 +56,9 @@ public class TestWindow : Window
 
 		widget.SetLabel( label );
 
-		var path = new LineEdit( value, parent );
-		path.SetStyles( "padding: 6px; background-color: #38393c; border-radius: 2px; margin-right: 4px;" );
-		widget.Layout.Add( path, 1 );
+		var lineEdit = new LineEdit( value, parent );
+		lineEdit.SetStyles( "padding: 6px; background-color: #38393c; border-radius: 2px; margin-right: 4px;" );
+		widget.Layout.Add( lineEdit, 1 );
 
 		var button = new Button( "Select folder", "folder_open", widget );
 		button.Clicked += () =>
@@ -65,14 +70,14 @@ public class TestWindow : Window
 
 			if ( fd.Execute() )
 			{
-				path.Text = fd.SelectedFile;
+				lineEdit.Text = fd.SelectedFile;
 			}
 		};
 
 		widget.Layout.Add( button );
 		parent.Layout.Add( widget );
 
-		return path;
+		return lineEdit;
 	}
 
 	public void CreateUI()

@@ -40,7 +40,7 @@ public class PropertyRow : Widget
 		if ( string.IsNullOrEmpty( info.Name ) )
 			return;
 
-		var size = new( 0, Size );
+		var size = new Rect( 0, Size );
 
 		size.width = labelWidth;
 		size.left += 2;
