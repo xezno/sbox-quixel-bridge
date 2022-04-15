@@ -24,7 +24,7 @@ public class TestWindow : Window
 		Show();
 	}
 
-	private Widget AddLineEdit( string label, Widget parent, string value = "" )
+	private LineEdit AddNumberEdit( string label, Widget parent, bool middle, string value = "" )
 	{
 		var widget = new Widget( parent );
 		widget.SetLayout( LayoutMode.TopToBottom );
@@ -37,12 +37,15 @@ public class TestWindow : Window
 		path.SetStyles( "padding: 6px; background-color: #38393c; border-radius: 2px; " );
 		widget.Layout.Add( path, 1 );
 
+		if ( middle )
+			widget.SetStyles( "margin-left: 4px; margin-right: 4px;" );
+
 		parent.Layout.Add( widget );
 
-		return widget;
+		return path;
 	}
 
-	private Button AddPathPicker( string label, Widget parent, string value = "" )
+	private LineEdit AddDirectoryPicker( string label, Widget parent, string value = "" )
 	{
 		var widget = new PropertyRow( parent );
 
@@ -62,14 +65,14 @@ public class TestWindow : Window
 
 			if ( fd.Execute() )
 			{
-				Log.Trace( fd.SelectedFile );
+				path.Text = fd.SelectedFile;
 			}
 		};
 
 		widget.Layout.Add( button );
 		parent.Layout.Add( widget );
 
-		return button;
+		return path;
 	}
 
 	public void CreateUI()
@@ -83,32 +86,49 @@ public class TestWindow : Window
 		w.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		w.Layout.Margin = new( 8 );
 
+		//
+		// Paths
+		//
 		var paths = new Widget( w );
 		paths.SetLayout( LayoutMode.TopToBottom );
-		AddPathPicker( "Addon Path", w, BridgeImporter.ProjectPath );
-		AddPathPicker( "Output directory", w, BridgeImporter.ExportDirectory );
+
+		var projectPathEdit = AddDirectoryPicker( "Addon Path", w, BridgeImporter.ProjectPath );
+		var outputPathEdit = AddDirectoryPicker( "Output directory", w, BridgeImporter.ExportDirectory );
+
 		w.Layout.Add( paths );
 
+		//
+		// Numbers
+		//
 		var numbers = new Widget( w );
 		numbers.SetLayout( LayoutMode.LeftToRight );
 
-		AddLineEdit( "Server port", numbers, BridgeImporter.ServerPort.ToString() );
-		AddLineEdit( "Scale", numbers, BridgeImporter.Scale.ToString() )
-			.SetStyles( "margin-left: 4px; margin-right: 4px;" );
-		AddLineEdit( "LOD increment", numbers, BridgeImporter.LodIncrement.ToString() );
+		var serverPortEdit = AddNumberEdit( "Server port", numbers, false, BridgeImporter.ServerPort.ToString() );
+		var scaleEdit = AddNumberEdit( "Scale", numbers, true, BridgeImporter.Scale.ToString() );
+		var lodIncrementEdit = AddNumberEdit( "LOD increment", numbers, false, BridgeImporter.LodIncrement.ToString() );
 
 		numbers.SetStyles( "padding-bottom: 0; padding-top: 16px; margin-bottom: 6px;" );
 		w.Layout.Add( numbers );
 
+		//
+		// Buttons
+		//
 		var buttons = new Widget( w );
 		buttons.SetLayout( LayoutMode.LeftToRight );
 		buttons.Layout.AddStretchCell();
 
 		var saveButton = new Button( "Save", "save", buttons );
+		saveButton.Clicked += () =>
+		{
+			BridgeImporter.ProjectPath = projectPathEdit.Text;
+			BridgeImporter.ExportDirectory = outputPathEdit.Text;
+			BridgeImporter.ServerPort = int.Parse( serverPortEdit.Text );
+			BridgeImporter.Scale = float.Parse( scaleEdit.Text );
+			BridgeImporter.LodIncrement = float.Parse( lodIncrementEdit.Text );
+		};
 		buttons.Layout.Add( saveButton );
 
 		w.Layout.Add( buttons );
-
 		Canvas = w;
 	}
 
