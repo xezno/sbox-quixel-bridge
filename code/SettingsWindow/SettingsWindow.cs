@@ -15,7 +15,7 @@ public class TestWindow : Window
 	public TestWindow()
 	{
 		Title = "Quixel Bridge Settings";
-		Size = new Vector2( 500, 182 );
+		Size = new Vector2( 500, 225 );
 		MaximumSize = Size;
 		MinimumSize = Size;
 		ResizeButtonsVisible = false;
@@ -81,7 +81,7 @@ public class TestWindow : Window
 		var w = new Widget( null );
 		w.SetLayout( LayoutMode.TopToBottom );
 		w.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		w.Layout.Margin = new( 8, 0, 8, 0 );
+		w.Layout.Margin = new( 8 );
 
 		var paths = new Widget( w );
 		paths.SetLayout( LayoutMode.TopToBottom );
@@ -98,8 +98,16 @@ public class TestWindow : Window
 		AddLineEdit( "LOD increment", numbers, BridgeImporter.LodIncrement.ToString() );
 
 		numbers.SetStyles( "padding-bottom: 0; padding-top: 16px; margin-bottom: 6px;" );
-
 		w.Layout.Add( numbers );
+
+		var buttons = new Widget( w );
+		buttons.SetLayout( LayoutMode.LeftToRight );
+		buttons.Layout.AddStretchCell();
+
+		var saveButton = new Button( "Save", "save", buttons );
+		buttons.Layout.Add( saveButton );
+
+		w.Layout.Add( buttons );
 
 		Canvas = w;
 	}
