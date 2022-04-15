@@ -1,5 +1,4 @@
 ﻿using Sandbox;
-using System.Reflection;
 using Tools;
 
 namespace QuixelBridge;
@@ -17,27 +16,9 @@ public class PropertyRow : Widget
 		Layout.Margin = new( labelWidth, 2, 0, 2 );
 	}
 
-	public PropertyRow( Widget parent, object target, string propertyName ) : this( parent )
-	{
-		var prop = target.GetType().GetProperty( propertyName );
-		SetLabel( prop );
-
-		var w = CanEditAttribute.CreateEditorFor( prop );
-		if ( w != null )
-		{
-			w.DataBinding = new PropertyBind( target, prop );
-			SetWidget( w );
-		}
-	}
-
 	public void SetLabel( string text )
 	{
 		info.Name = text;
-	}
-
-	public void SetLabel( PropertyInfo info )
-	{
-		this.info = DisplayInfo.ForProperty( info );
 	}
 
 	public T SetWidget<T>( T w ) where T : Widget
@@ -59,7 +40,7 @@ public class PropertyRow : Widget
 		if ( string.IsNullOrEmpty( info.Name ) )
 			return;
 
-		var size = new Rect( 0, Size );
+		var size = new( 0, Size );
 
 		size.width = labelWidth;
 		size.left += 2;
