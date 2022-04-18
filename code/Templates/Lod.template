@@ -1,7 +1,7 @@
 ﻿{
 	_class = "LODGroup"
 	switch_threshold = <#= Threshold #>
-	meshes = 
+	meshes =
 	[
 		"<#= Mesh #>",
 	]

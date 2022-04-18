@@ -7,7 +7,7 @@ Layer0
 	//---- Metalness ----
 	F_METALNESS_TEXTURE 1
 	TextureMetalness "<#= Metallic #>"
-	
+
 	//---- Ambient Occlusion ----
 	F_AMBIENT_OCCLUSION_TEXTURE 1
 	TextureAmbientOcclusion "<#= AmbientOcclusion #>"
