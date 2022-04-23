@@ -179,15 +179,13 @@ public class BridgeImporter
 		Directory.CreateDirectory( vmatPath );
 		vmatPath += $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 
-		Template baseVmat;
-		if ( quixelAsset.Tags.Contains( "decal" ) )
+		string template = quixelAsset.Type switch
 		{
-			baseVmat = new Template( "templates/Materials/Decal.template" );
-		}
-		else
-		{
-			baseVmat = new Template( "templates/Materials/Complex.template" );
-		}
+			"atlas" => "templates/Materials/Decal.template",
+			_ => "templates/Materials/Complex.template"
+		};
+
+		Template baseVmat = new( template );
 
 		var pairs = new Dictionary<string, string>
 		{
