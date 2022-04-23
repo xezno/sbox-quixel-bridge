@@ -179,7 +179,16 @@ public class BridgeImporter
 		Directory.CreateDirectory( vmatPath );
 		vmatPath += $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 
-		var baseVmat = new Template( "templates/Material.template" );
+		Template baseVmat;
+		if ( quixelAsset.Tags.Contains( "decal" ) )
+		{
+			baseVmat = new Template( "templates/Materials/Decal.template" );
+		}
+		else
+		{
+			baseVmat = new Template( "templates/Materials/Complex.template" );
+		}
+
 		var pairs = new Dictionary<string, string>
 		{
 			//
@@ -189,6 +198,7 @@ public class BridgeImporter
 			{ "Normal", "[1.000000 1.000000 1.000000 0.000000]" },
 			{ "Roughness", "[1.000000 1.000000 1.000000 0.000000]" },
 			{ "AmbientOcclusion", "[1.000000 1.000000 1.000000 0.000000]" },
+			{ "Translucency", "[1.000000 1.000000 1.000000 0.000000]" },
 
 			// Metallic should be 0 by default
 			{ "Metallic", "[0.000000 0.000000 0.000000 0.000000]" }
@@ -216,6 +226,8 @@ public class BridgeImporter
 					pairs["Metallic"] = path;
 					break;
 				case "opacity":
+					pairs["Translucency"] = path;
+					break;
 				case "displacement":
 				case "transmission":
 					// TODO
