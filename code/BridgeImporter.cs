@@ -158,8 +158,11 @@ public class BridgeImporter
 			}
 		}
 
-		CopyAssets( quixelAsset.Meshes, quixelAsset, "meshes" );
-		CopyAssets( quixelAsset.LODs, quixelAsset, "meshes" );
+		if ( quixelAsset.Meshes.Count > 0 )
+		{
+			CopyAssets( quixelAsset.Meshes, quixelAsset, "meshes" );
+			CopyAssets( quixelAsset.LODs, quixelAsset, "meshes" );
+		}
 		CopyAssets( quixelAsset.Textures, quixelAsset, "textures" );
 
 		//
@@ -201,7 +204,7 @@ public class BridgeImporter
 			// Metallic should be 0 by default
 			{ "Metallic", "[0.000000 0.000000 0.000000 0.000000]" },
             
-            // Displasment (for the parallax of decals)
+			// Displasment (for the parallax of decals)
 			{ "Displacement", "[1.000000 1.000000 1.000000 0.000000]" }
 		};
 
