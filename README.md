@@ -8,8 +8,8 @@ https://user-images.githubusercontent.com/12881812/163437857-7d42e4f6-4533-4c68-
 
 ## Disclaimer
 
-Please be aware that the 'free' Quixel tier is for use with Unreal Engine only. 
-This tool should only be used with either the 'Personal', 'Indie', or 'Studio' Quixel tiers. 
+Please be aware that the 'free' Quixel tier is for use with Unreal Engine only.
+This tool should only be used with either the 'Personal', 'Indie', or 'Studio' Quixel tiers.
 More information about these is located [here](https://quixel.com/pricing).
 
 I am not affiliated with Quixel, Epic Games, or Facepunch.

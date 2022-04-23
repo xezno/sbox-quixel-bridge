@@ -90,7 +90,7 @@ public class BridgeImporter
 				if ( cat == "3d" || cat == "2d" || cat == "surface" )
 					continue;
 
-				path += $"{cat}/";
+				path += $"{cat.ToSourceName()}/";
 			}
 
 			path = path.NormalizePath();
@@ -134,7 +134,7 @@ public class BridgeImporter
 		// Create destination directories
 		Directory.CreateDirectory( path );
 
-		var assetPath = $"{path}/assets";
+		var assetPath = $"{path}assets";
 		Directory.CreateDirectory( assetPath );
 
 		void CopyAssets<T>( List<T> items, QuixelAsset asset, string subDir ) where T : IBaseAsset
@@ -146,12 +146,13 @@ public class BridgeImporter
 			{
 				T item = items[i];
 				string destination = item.Path.Replace( asset.Path, joinedSubDir );
+				destination = destination.Replace( item.Name, item.Name.ToSourceName() );
 
 				Directory.CreateDirectory( Path.GetDirectoryName( destination ) );
 				File.Copy( item.Path, destination, true );
 
 				item.Path = destination;
-				item.Name = item.Name.ToLower();
+				item.Name = item.Name.ToSourceName();
 
 				items[i] = item;
 			}
@@ -174,9 +175,9 @@ public class BridgeImporter
 
 	private static bool CreateMaterial( QuixelAsset quixelAsset )
 	{
-		var vmatPath = $"{quixelAsset.Path}/materials/";
+		var vmatPath = $"{quixelAsset.Path}materials/";
 		Directory.CreateDirectory( vmatPath );
-		vmatPath += $"/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
+		vmatPath += $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 
 		var baseVmat = new Template( "templates/Material.template" );
 		var pairs = new Dictionary<string, string>
@@ -234,8 +235,8 @@ public class BridgeImporter
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( ProjectPath )}/materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
-		var vmdlPath = $"{quixelAsset.Path}/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl";
+		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( ProjectPath )}materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
+		var vmdlPath = $"{quixelAsset.Path}{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl";
 
 		var meshes = "";
 		var lods = "";

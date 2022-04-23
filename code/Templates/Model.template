@@ -1,20 +1,20 @@
 ﻿<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc28:version{fb63b6ca-f435-4aa0-a2c7-c66ddc651dca} -->
 {
-	rootNode = 
+	rootNode =
 	{
 		_class = "RootNode"
-		children = 
+		children =
 		[
 			{
 				_class = "LODGroupList"
-				children = 
+				children =
 				[
 					<#= Lods #>
 				]
 			},
 			{
 				_class = "MaterialGroupList"
-				children = 
+				children =
 				[
 					{
 						_class = "DefaultMaterialGroup"
@@ -26,14 +26,14 @@
 			},
 			{
 				_class = "RenderMeshList"
-				children = 
+				children =
 				[
 					<#= Meshes #>
 				]
 			},
 			{
 				_class = "PhysicsShapeList"
-				children = 
+				children =
 				[
 					{
 						_class = "PhysicsHullFromRender"
