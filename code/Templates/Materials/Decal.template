@@ -4,6 +4,12 @@ Layer0
 {
 	shader "projected_decals.vfx"
 
+	//---- Normal ----
+	F_NORMAL_MAP 1
+
+	//---- Parallax Occlusion ----
+	F_PARALLAX 1
+
 	//---- Metalness ----
 	F_METALNESS_TEXTURE 1
 	TextureMetalness "<#= Metallic #>"
@@ -35,6 +41,13 @@ Layer0
 	//---- Lighting ----
 	g_flDirectionalLightmapMinZ "0.050"
 	g_flDirectionalLightmapStrength "1.000"
+
+	//---- Parallax ----
+	g_flHeightMapScale "0.020"
+	g_nLODThreshold "4"
+	g_nMaxSamples "32"
+	g_nMinSamples "8"
+	TextureHeight "<#= Displacement #>"
 
 	//---- Texture Coordinates ----
 	g_nScaleTexCoordUByModelScaleAxis "0"
