@@ -10,30 +10,11 @@ Layer0
 	//---- Parallax Occlusion ----
 	F_PARALLAX 1
 
-	//---- Metalness ----
-	F_METALNESS_TEXTURE 1
-	TextureMetalness "<#= Metallic #>"
-
 	//---- Ambient Occlusion ----
-	F_AMBIENT_OCCLUSION_TEXTURE 1
 	TextureAmbientOcclusion "<#= AmbientOcclusion #>"
 
-	//---- Translucent ----
-	F_ALPHA_TEST 1
-
 	//---- Color ----
-	g_flModelTintAmount "1.000"
-	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
 	TextureColor "<#= Diffuse #>"
-
-	//---- Normal ----
-	TextureNormal "<#= Normal #>"
-
-	//---- Roughness ----
-	TextureRoughness "<#= Roughness #>"
-
-	//---- Fade ----
-	g_flFadeExponent "1.000"
 
 	//---- Fog ----
 	g_bFogEnabled "1"
@@ -42,6 +23,12 @@ Layer0
 	g_flDirectionalLightmapMinZ "0.050"
 	g_flDirectionalLightmapStrength "1.000"
 
+	//---- Metalness ----
+	TextureMetalness "<#= Metallic #>"
+
+	//---- Normal ----
+	TextureNormal "<#= Normal #>"
+
 	//---- Parallax ----
 	g_flHeightMapScale "0.020"
 	g_nLODThreshold "4"
@@ -49,15 +36,9 @@ Layer0
 	g_nMinSamples "8"
 	TextureHeight "<#= Displacement #>"
 
-	//---- Texture Coordinates ----
-	g_nScaleTexCoordUByModelScaleAxis "0"
-	g_nScaleTexCoordVByModelScaleAxis "0"
-	g_vTexCoordOffset "[0.000 0.000]"
-	g_vTexCoordScale "[1.000 1.000]"
-	g_vTexCoordScrollSpeed "[0.000 0.000]"
+	//---- Roughness ----
+	TextureRoughness "<#= Roughness #>"
 
 	//---- Translucent ----
-	g_flAlphaTestReference "0.010"
-	g_flAntiAliasedEdgeStrength "0.000"
 	TextureTranslucency "<#= Translucency #>"
 }
