@@ -4,24 +4,19 @@ Layer0
 {
 	shader "complex.vfx"
 
-	//---- Metalness ----
+	//---- PBR ----
 	F_METALNESS_TEXTURE 1
-	TextureMetalness "<#= Metallic #>"
+	F_SPECULAR 1
 
 	//---- Ambient Occlusion ----
-	F_AMBIENT_OCCLUSION_TEXTURE 1
+	g_flAmbientOcclusionDirectDiffuse "0.000"
+	g_flAmbientOcclusionDirectSpecular "0.000"
 	TextureAmbientOcclusion "<#= AmbientOcclusion #>"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
 	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
 	TextureColor "<#= Diffuse #>"
-
-	//---- Normal ----
-	TextureNormal "<#= Normal #>"
-
-	//---- Roughness ----
-	TextureRoughness "<#= Roughness #>"
 
 	//---- Fade ----
 	g_flFadeExponent "1.000"
@@ -32,6 +27,15 @@ Layer0
 	//---- Lighting ----
 	g_flDirectionalLightmapMinZ "0.050"
 	g_flDirectionalLightmapStrength "1.000"
+
+	//---- Metalness ----
+	TextureMetalness "<#= Metallic #>"
+
+	//---- Normal ----
+	TextureNormal "<#= Normal #>"
+
+	//---- Roughness ----
+	TextureRoughness "<#= Roughness #>"
 
 	//---- Texture Coordinates ----
 	g_nScaleTexCoordUByModelScaleAxis "0"

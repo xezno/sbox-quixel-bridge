@@ -163,7 +163,7 @@ public class TestWindow : Window
 		var dict = new Dictionary<string, string>();
 
 		dict["ProjectPath"] = BridgeImporter.ProjectPath;
-		dict["ExportDirectory"] = BridgeImporter.ExportDirectory;
+		dict["ExportDirectory"] = BridgeImporter.ExportDirectory.ToSourceName();
 		dict["ServerPort"] = BridgeImporter.ServerPort.ToString();
 		dict["Scale"] = BridgeImporter.Scale.ToString();
 		dict["LodIncrement"] = BridgeImporter.LodIncrement.ToString();
