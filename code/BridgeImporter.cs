@@ -54,9 +54,18 @@ public class BridgeImporter
 				var asset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path == mdlPath );
 				if ( asset == null )
 				{
-					Log.Warning( $"Couldn't find the asset that just got exported? Did it fail?" );
+					// Retry
+					await Task.Delay( 1000 ); // Wait a second...
+					asset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path == mdlPath );
+
+					if ( asset == null )
+					{
+						// Still nothing
+						Log.Warning( $"Couldn't find the asset that just got exported? Did it fail?" );
+					}
 				}
-				else
+
+				if ( asset != null )
 				{
 					asset.Compile( true ); // Force a full compile
 					Log.Trace( $"Exported to: {asset}" );
