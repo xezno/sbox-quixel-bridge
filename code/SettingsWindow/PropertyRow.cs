@@ -5,8 +5,8 @@ namespace QuixelBridge;
 
 public class PropertyRow : Widget
 {
+	private readonly int labelWidth = 125;
 	private DisplayInfo info;
-	private int labelWidth = 125;
 
 	public PropertyRow( Widget parent, int labelWidth = 125 ) : base( parent )
 	{

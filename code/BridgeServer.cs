@@ -13,16 +13,16 @@ class BridgeServer
 {
 	private TcpListener tcpListener;
 	private Thread tcpListenerThread;
-	private static bool QueueDirty { get; set; } = false;
-	private static List<string> ImportQueue { get; set; } = new List<string>();
-	private readonly int port;
+	private static bool queueDirty;
 
-	private bool isRunning;
+	private static List<string> importQueue = new();
+	private bool isRunning = true;
+
+	private readonly int port;
 
 	public BridgeServer( int port )
 	{
 		this.port = port;
-		this.isRunning = true;
 	}
 
 	public void StartServer()
@@ -49,13 +49,13 @@ class BridgeServer
 	[Sandbox.Event.Frame]
 	public static void OnFrame()
 	{
-		if ( !QueueDirty )
+		if ( !queueDirty )
 			return;
 
 		Log.Trace( "Import queue dirty!" );
-		var importQueueCopy = ImportQueue.ToArray();
-		QueueDirty = false;
-		ImportQueue.Clear();
+		var importQueueCopy = importQueue.ToArray();
+		queueDirty = false;
+		importQueue.Clear();
 
 		var asyncTask = async () =>
 		{
@@ -124,8 +124,8 @@ class BridgeServer
 						clientMessage += Encoding.ASCII.GetString( incomingData );
 					}
 
-					ImportQueue.Add( clientMessage );
-					QueueDirty = true;
+					importQueue.Add( clientMessage );
+					queueDirty = true;
 				}
 				catch ( Exception ex )
 				{
