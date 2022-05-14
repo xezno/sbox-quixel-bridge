@@ -43,10 +43,7 @@ public class PropertyRow : Widget
 		var size = new Rect( 0, Size );
 
 		size.width = labelWidth;
-		size.left += 2;
-
-		if ( size.height > 28 )
-			size.height = 28;
+		size.left += 16;
 
 		Paint.SetDefaultFont();
 		Paint.DrawText( size, info.Name, TextFlag.LeftCenter );

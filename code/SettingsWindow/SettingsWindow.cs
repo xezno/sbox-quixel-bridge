@@ -20,7 +20,7 @@ public partial class SettingsWindow : Window
 	public SettingsWindow()
 	{
 		Title = "Quixel Bridge Settings";
-		Size = new Vector2( 500, 250 );
+		Size = new Vector2( 400, 250 );
 		MaximumSize = Size;
 		MinimumSize = Size;
 		ResizeButtonsVisible = false;
@@ -56,9 +56,9 @@ public partial class SettingsWindow : Window
 		//
 		// Numbers
 		//
-		AddTitle( "Quixel", w );
+		AddTitle( "Imports", w );
 		var numbers = new Widget( w );
-		numbers.SetLayout( LayoutMode.LeftToRight );
+		numbers.SetLayout( LayoutMode.TopToBottom );
 
 		var serverPortEdit = AddNumberEdit( "Server port", numbers, false, BridgeImporter.ServerPort.ToString() );
 		var scaleEdit = AddNumberEdit( "Scale", numbers, true, BridgeImporter.Scale.ToString() );
@@ -74,7 +74,7 @@ public partial class SettingsWindow : Window
 		buttons.Layout.AddStretchCell();
 
 		var cancelButton = new Button( "Cancel", "close", buttons );
-		cancelButton.SetStyles( "margin-right: 4px;" );
+		cancelButton.SetStyles( "margin-right: 4px; background-color: #38393c; border: 0px;" );
 		cancelButton.Clicked += () =>
 		{
 			Close();
@@ -83,6 +83,7 @@ public partial class SettingsWindow : Window
 		buttons.Layout.Add( cancelButton );
 
 		var saveButton = new Button( "Save and Close", "save", buttons );
+		saveButton.SetStyles( "background-color: #38393c; border: 0px;" );
 		saveButton.Clicked += () =>
 		{
 			BridgeImporter.ProjectPath = SelectedAddonPath;
