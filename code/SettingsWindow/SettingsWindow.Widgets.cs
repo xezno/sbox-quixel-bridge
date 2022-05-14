@@ -54,6 +54,27 @@ partial class SettingsWindow
 
 		return comboBox;
 	}
+	private static ComboBox AddComboBox( string label, Widget parent, List<string> items, string selectedItem )
+	{
+		var widget = new PropertyRow( parent );
+
+		widget.SetLabel( label );
+
+		var comboBox = new ComboBox( parent );
+		comboBox.SetStyles( "background-color: #38393c;" );
+
+		foreach ( var item in items )
+		{
+			comboBox.AddItem( item );
+		}
+
+		comboBox.TrySelectNamed( selectedItem );
+
+		widget.Layout.Add( comboBox, 1 );
+		parent.Layout.Add( widget );
+
+		return comboBox;
+	}
 
 	private static string GetAddonIcon( LocalAddon addon )
 	{

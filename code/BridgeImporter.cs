@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,6 +14,7 @@ public class BridgeImporter
 	public static int ServerPort { get; set; } = 24981;
 	public static float Scale { get; set; } = 0.3937f;
 	public static float LodIncrement { get; set; } = 25.0f;
+	public static string Entity { get; set; } = "prop_static";
 	#endregion
 
 	private BridgeServer listener;
@@ -292,7 +292,8 @@ public class BridgeImporter
 		{
 			{ "Material", vmatPath },
 			{ "Lods", lods },
-			{ "Meshes", meshes }
+			{ "Meshes", meshes },
+			{ "Entity", Entity }
 		} ) );
 
 		return true;

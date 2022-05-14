@@ -20,7 +20,7 @@ public partial class SettingsWindow : Window
 	public SettingsWindow()
 	{
 		Title = "Quixel Bridge Settings";
-		Size = new Vector2( 400, 250 );
+		Size = new Vector2( 400, 275 );
 		MaximumSize = Size;
 		MinimumSize = Size;
 		ResizeButtonsVisible = false;
@@ -43,28 +43,28 @@ public partial class SettingsWindow : Window
 		w.Layout.Margin = new( 8 );
 
 		//
-		// Paths
+		// Addon Settings
 		//
-		AddTitle( "Addon", w );
-		var paths = new Widget( w );
-		paths.SetLayout( LayoutMode.TopToBottom );
+		AddTitle( "Addon Settings", w );
+		var addonSettings = new Widget( w );
+		addonSettings.SetLayout( LayoutMode.TopToBottom );
 
-		var addonName = AddAddonPicker( "Export Addon", w, Utility.Addons.GetAll() );
-
-		w.Layout.Add( paths );
+		var addonName = AddAddonPicker( "Export Addon", addonSettings, Utility.Addons.GetAll() );
+		w.Layout.Add( addonSettings );
 
 		//
-		// Numbers
+		// Import Settings
 		//
-		AddTitle( "Imports", w );
-		var numbers = new Widget( w );
-		numbers.SetLayout( LayoutMode.TopToBottom );
+		AddTitle( "Import Settings", w );
+		var importSettings = new Widget( w );
+		importSettings.SetLayout( LayoutMode.TopToBottom );
 
-		var serverPortEdit = AddNumberEdit( "Server port", numbers, false, BridgeImporter.ServerPort.ToString() );
-		var scaleEdit = AddNumberEdit( "Scale", numbers, true, BridgeImporter.Scale.ToString() );
-		var lodIncrementEdit = AddNumberEdit( "LOD increment", numbers, false, BridgeImporter.LodIncrement.ToString() );
+		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Entity );
+		var serverPortEdit = AddNumberEdit( "Server port", importSettings, false, BridgeImporter.ServerPort.ToString() );
+		var scaleEdit = AddNumberEdit( "Scale", importSettings, true, BridgeImporter.Scale.ToString() );
+		var lodIncrementEdit = AddNumberEdit( "LOD increment", importSettings, false, BridgeImporter.LodIncrement.ToString() );
 
-		w.Layout.Add( numbers );
+		w.Layout.Add( importSettings );
 
 		//
 		// Buttons
@@ -90,6 +90,7 @@ public partial class SettingsWindow : Window
 			BridgeImporter.ServerPort = int.Parse( serverPortEdit.Text );
 			BridgeImporter.Scale = float.Parse( scaleEdit.Text );
 			BridgeImporter.LodIncrement = float.Parse( lodIncrementEdit.Text );
+			BridgeImporter.Entity = entityEdit.CurrentText;
 
 			Save();
 			Close();

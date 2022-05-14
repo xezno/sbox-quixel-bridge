@@ -1,6 +1,6 @@
-﻿using Sandbox;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace QuixelBridge;
@@ -15,16 +15,32 @@ partial class SettingsWindow
 		var jsonInput = File.ReadAllText( "quixel_settings.json" );
 		var dict = JsonSerializer.Deserialize<Dictionary<string, string>>( jsonInput );
 
-		BridgeImporter.ProjectPath = dict["ProjectPath"];
-		BridgeImporter.ServerPort = int.Parse( dict["ServerPort"] );
-		BridgeImporter.Scale = float.Parse( dict["Scale"] );
-		BridgeImporter.LodIncrement = float.Parse( dict["LodIncrement"] );
+		string entity;
+		dict.TryGetValue( "Entity", out entity );
+		BridgeImporter.Entity = entity;
+
+		string projectPath;
+		dict.TryGetValue( "ProjectPath", out projectPath );
+		BridgeImporter.ProjectPath = projectPath;
+
+		string serverPort;
+		dict.TryGetValue( "ServerPort", out serverPort );
+		BridgeImporter.ServerPort = int.Parse( serverPort );
+
+		string scale;
+		dict.TryGetValue( "Scale", out scale );
+		BridgeImporter.Scale = float.Parse( scale );
+
+		string lodIncrement;
+		dict.TryGetValue( "LodIncrement", out lodIncrement );
+		BridgeImporter.LodIncrement = float.Parse( lodIncrement );
 	}
 
 	private static void Save()
 	{
 		var dict = new Dictionary<string, string>();
 
+		dict["Entity"] = BridgeImporter.Entity;
 		dict["ProjectPath"] = BridgeImporter.ProjectPath;
 		dict["ServerPort"] = BridgeImporter.ServerPort.ToString();
 		dict["Scale"] = BridgeImporter.Scale.ToString();

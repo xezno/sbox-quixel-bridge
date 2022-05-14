@@ -50,7 +50,7 @@
 			},
 		]
 		model_archetype = ""
-		primary_associated_entity = ""
+		primary_associated_entity = "<#= Entity #>"
 		anim_graph_name = ""
 	}
 }
