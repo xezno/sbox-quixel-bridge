@@ -1,4 +1,5 @@
-﻿using Tools;
+﻿using System.Reflection.Emit;
+using Tools;
 
 /*
  * TODO:
@@ -20,7 +21,7 @@ public partial class SettingsWindow : Window
 	public SettingsWindow()
 	{
 		Title = "Quixel Bridge Settings";
-		Size = new Vector2( 400, 275 );
+		Size = new Vector2( 400, 300 );
 		MaximumSize = Size;
 		MinimumSize = Size;
 		ResizeButtonsVisible = false;
@@ -37,16 +38,19 @@ public partial class SettingsWindow : Window
 
 		StatusBar.Visible = false;
 
+
 		var w = new Widget( null );
 		w.SetLayout( LayoutMode.TopToBottom );
-		w.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+		w.SetSizeMode( SizeMode.Default, SizeMode.Default );
 		w.Layout.Margin = new( 8 );
+		w.SetStyles( "background-color: #38393c; border-radius: 2px;" );
 
 		//
 		// Addon Settings
 		//
 		AddTitle( "Addon Settings", w );
 		var addonSettings = new Widget( w );
+		addonSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		addonSettings.SetLayout( LayoutMode.TopToBottom );
 
 		var addonName = AddAddonPicker( "Export Addon", addonSettings, Utility.Addons.GetAll() );
@@ -57,6 +61,7 @@ public partial class SettingsWindow : Window
 		//
 		AddTitle( "Import Settings", w );
 		var importSettings = new Widget( w );
+		importSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		importSettings.SetLayout( LayoutMode.TopToBottom );
 
 		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Entity );
@@ -69,11 +74,12 @@ public partial class SettingsWindow : Window
 		// Buttons
 		//
 		var buttons = new Widget( w );
+		buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		buttons.SetLayout( LayoutMode.LeftToRight );
 		buttons.Layout.AddStretchCell();
 
 		var cancelButton = new Button( "Cancel", "close", buttons );
-		cancelButton.SetStyles( "margin-right: 4px; background-color: #38393c; border: 0px;" );
+		cancelButton.SetStyles( "margin-right: 4px; background-color: #201f21; border: 0px;" );
 		cancelButton.Clicked += () =>
 		{
 			Close();
@@ -82,7 +88,7 @@ public partial class SettingsWindow : Window
 		buttons.Layout.Add( cancelButton );
 
 		var saveButton = new Button( "Save and Close", "save", buttons );
-		saveButton.SetStyles( "background-color: #38393c; border: 0px;" );
+		saveButton.SetStyles( "background-color: #201f21; border: 0px;" );
 		saveButton.Clicked += () =>
 		{
 			BridgeImporter.ProjectPath = SelectedAddonPath;

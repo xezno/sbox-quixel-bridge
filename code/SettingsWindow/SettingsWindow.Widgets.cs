@@ -10,9 +10,10 @@ partial class SettingsWindow
 	{
 		var widget = new PropertyRow( parent );
 		widget.SetLabel( label );
+		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 
 		var lineEdit = new LineEdit( value, parent );
-		lineEdit.SetStyles( "padding: 2px; background-color: #38393c; border-radius: 2px; margin-top: 5px;" );
+		lineEdit.SetStyles( "padding: 2px; background-color: #201f21; border-radius: 2px; margin-top: 5px;" );
 		widget.Layout.Add( lineEdit, 1 );
 
 		parent.Layout.Add( widget );
@@ -24,11 +25,11 @@ partial class SettingsWindow
 	private static ComboBox AddAddonPicker( string label, Widget parent, IReadOnlyList<LocalAddon> addons )
 	{
 		var widget = new PropertyRow( parent );
-
+		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		widget.SetLabel( label );
 
 		var comboBox = new ComboBox( parent );
-		comboBox.SetStyles( "background-color: #38393c;" );
+		comboBox.SetStyles( "background-color: #201f21;" );
 
 		int comboBoxIndex = 0;
 		for ( int i = 0; i < addons.Count; i++ )
@@ -57,11 +58,11 @@ partial class SettingsWindow
 	private static ComboBox AddComboBox( string label, Widget parent, List<string> items, string selectedItem )
 	{
 		var widget = new PropertyRow( parent );
-
+		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		widget.SetLabel( label );
 
 		var comboBox = new ComboBox( parent );
-		comboBox.SetStyles( "background-color: #38393c;" );
+		comboBox.SetStyles( "background-color: #201f21;" );
 
 		foreach ( var item in items )
 		{
@@ -88,6 +89,7 @@ partial class SettingsWindow
 	private static Label AddTitle( string text, Widget parent )
 	{
 		var label = new Label( text, parent );
+		label.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		label.SetStyles( "color: white;" );
 
 		parent.Layout.Add( label, 1 );
