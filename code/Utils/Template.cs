@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Tools;
 
 namespace QuixelBridge;
 
@@ -8,16 +10,21 @@ namespace QuixelBridge;
 /// </summary>
 public class Template
 {
-	// HACK
-	private const string BasePath = "addons/quixel.bridge/code/";
 	private string TemplateContents { get; set; }
 
 	public Template( string templatePath )
 	{
 		var dirName = Path.GetDirectoryName( templatePath );
 		var fileName = Path.GetFileName( templatePath );
-		templatePath = Path.Join( BasePath, dirName, fileName );
+
+		templatePath = Path.Join( FindBasePath(), dirName, fileName );
 		TemplateContents = File.ReadAllText( templatePath );
+	}
+
+	private string FindBasePath()
+	{
+		var addon = Utility.Addons.GetAll().FirstOrDefault( x => x.Config.Ident == "quixel_bridge" );
+		return addon.GetCodePath();
 	}
 
 	public string Parse( Dictionary<string, string> values )
