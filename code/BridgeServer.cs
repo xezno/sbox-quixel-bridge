@@ -17,9 +17,12 @@ class BridgeServer
 	private static List<string> ImportQueue { get; set; } = new List<string>();
 	private readonly int port;
 
+	private bool isRunning;
+
 	public BridgeServer( int port )
 	{
 		this.port = port;
+		this.isRunning = true;
 	}
 
 	public void StartServer()
@@ -32,7 +35,11 @@ class BridgeServer
 		tcpListenerThread.Start();
 	}
 
-	public void EndServer() => tcpListener.Stop();
+	public void EndServer()
+	{
+		isRunning = false;
+		tcpListener.Stop();
+	}
 
 	//
 	// Shit way of running things on the main thread
@@ -102,21 +109,29 @@ class BridgeServer
 			byte[] bytes = new byte[1024];
 			while ( true )
 			{
-				using var connectedTcpClient = tcpListener.AcceptTcpClient();
-				using NetworkStream stream = connectedTcpClient.GetStream();
-
-				int length;
-				string clientMessage = "";
-
-				while ( (length = stream.Read( bytes, 0, bytes.Length )) != 0 )
+				try
 				{
-					byte[] incomingData = new byte[length];
-					Array.Copy( bytes, 0, incomingData, 0, length );
-					clientMessage += Encoding.ASCII.GetString( incomingData );
-				}
+					using var connectedTcpClient = tcpListener.AcceptTcpClient();
+					using NetworkStream stream = connectedTcpClient.GetStream();
 
-				ImportQueue.Add( clientMessage );
-				QueueDirty = true;
+					int length;
+					string clientMessage = "";
+
+					while ( (length = stream.Read( bytes, 0, bytes.Length )) != 0 )
+					{
+						byte[] incomingData = new byte[length];
+						Array.Copy( bytes, 0, incomingData, 0, length );
+						clientMessage += Encoding.ASCII.GetString( incomingData );
+					}
+
+					ImportQueue.Add( clientMessage );
+					QueueDirty = true;
+				}
+				catch ( Exception ex )
+				{
+					if ( isRunning )
+						throw;
+				}
 			}
 		}
 		catch ( Exception ex ) // s&box does not like it when crashing on a non-main thread!!! handle it ourselves here
