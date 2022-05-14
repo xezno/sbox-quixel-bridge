@@ -12,7 +12,6 @@ public class BridgeImporter
 	// TODO: Expose these
 	#region Options
 	public static string ProjectPath { get; set; } = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\megascans";
-	public static string ExportDirectory { get; set; } = "megascans";
 	public static int ServerPort { get; set; } = 24981;
 	public static float Scale { get; set; } = 0.3937f;
 	public static float LodIncrement { get; set; } = 25.0f;
@@ -84,7 +83,7 @@ public class BridgeImporter
 		// Set location path
 		//
 		{
-			path = $"{ProjectPath}/{ExportDirectory}/";
+			path = $"{ProjectPath}/";
 			foreach ( var cat in quixelAsset.Categories )
 			{
 				if ( cat == "3d" || cat == "2d" || cat == "surface" )
