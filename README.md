@@ -2,6 +2,14 @@
 
 Quickly and easily import Quixel assets using Quixel Bridge.
 
+## Contents
+
+* [Demo](#demo)
+* [Disclaimer](#disclaimer)
+* [Instructions](#instructions)
+  + [Bridge Setup](#bridge-setup)
+  + [s&box Setup](#sbox-setup)
+
 ## Demo
 
 https://user-images.githubusercontent.com/12881812/163437857-7d42e4f6-4533-4c68-a661-aec74a4c976a.mp4
