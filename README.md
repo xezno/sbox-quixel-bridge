@@ -37,6 +37,6 @@ compile slower)
 ### s&box Setup
 
 1. Download this repo
-2. Extract it to your s&box folder as "addons/Quixel.Bridge" (naming is important!)
+2. Extract it somewhere permanent
 3. Add it through the s&box addon manager
 4. The "Quixel" menu should appear in the s&box editor. Click "Start Bridge Plugin" to open Bridge and start the plugin.
