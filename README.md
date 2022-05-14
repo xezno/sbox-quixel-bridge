@@ -2,6 +2,14 @@
 
 Quickly and easily import Quixel assets using Quixel Bridge.
 
+## Contents
+
+* [Demo](#demo)
+* [Disclaimer](#disclaimer)
+* [Instructions](#instructions)
+  + [Bridge Setup](#bridge-setup)
+  + [s&box Setup](#sbox-setup)
+
 ## Demo
 
 https://user-images.githubusercontent.com/12881812/163437857-7d42e4f6-4533-4c68-a661-aec74a4c976a.mp4
@@ -37,6 +45,6 @@ compile slower)
 ### s&box Setup
 
 1. Download this repo
-2. Extract it to your s&box folder as "addons/Quixel.Bridge" (naming is important!)
+2. Extract it somewhere permanent
 3. Add it through the s&box addon manager
 4. The "Quixel" menu should appear in the s&box editor. Click "Start Bridge Plugin" to open Bridge and start the plugin.
