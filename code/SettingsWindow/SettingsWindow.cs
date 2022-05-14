@@ -61,7 +61,6 @@ public partial class SettingsWindow : Window
 
 		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Entity );
 		var serverPortEdit = AddNumberEdit( "Server port", importSettings, false, BridgeImporter.ServerPort.ToString() );
-		var scaleEdit = AddNumberEdit( "Scale", importSettings, true, BridgeImporter.Scale.ToString() );
 		var lodIncrementEdit = AddNumberEdit( "LOD increment", importSettings, false, BridgeImporter.LodIncrement.ToString() );
 
 		w.Layout.Add( importSettings );
@@ -88,7 +87,6 @@ public partial class SettingsWindow : Window
 		{
 			BridgeImporter.ProjectPath = SelectedAddonPath;
 			BridgeImporter.ServerPort = int.Parse( serverPortEdit.Text );
-			BridgeImporter.Scale = float.Parse( scaleEdit.Text );
 			BridgeImporter.LodIncrement = float.Parse( lodIncrementEdit.Text );
 			BridgeImporter.Entity = entityEdit.CurrentText;
 

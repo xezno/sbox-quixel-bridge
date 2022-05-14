@@ -12,7 +12,6 @@ public class BridgeImporter
 	#region Options
 	public static string ProjectPath { get; set; } = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\megascans";
 	public static int ServerPort { get; set; } = 24981;
-	public static float Scale { get; set; } = 0.3937f;
 	public static float LodIncrement { get; set; } = 25.0f;
 	public static string Entity { get; set; } = "prop_static";
 	#endregion
@@ -280,7 +279,6 @@ public class BridgeImporter
 			var baseMesh = new Template( "templates/Mesh.template" );
 			meshes += baseMesh.Parse( new()
 			{
-				{ "Scale", Scale.ToString() },
 				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( ProjectPath ).NormalizePath() }
 			} );
 		}

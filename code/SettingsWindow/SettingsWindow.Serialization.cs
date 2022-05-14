@@ -27,10 +27,6 @@ partial class SettingsWindow
 		dict.TryGetValue( "ServerPort", out serverPort );
 		BridgeImporter.ServerPort = int.Parse( serverPort );
 
-		string scale;
-		dict.TryGetValue( "Scale", out scale );
-		BridgeImporter.Scale = float.Parse( scale );
-
 		string lodIncrement;
 		dict.TryGetValue( "LodIncrement", out lodIncrement );
 		BridgeImporter.LodIncrement = float.Parse( lodIncrement );
@@ -43,7 +39,6 @@ partial class SettingsWindow
 		dict["Entity"] = BridgeImporter.Entity;
 		dict["ProjectPath"] = BridgeImporter.ProjectPath;
 		dict["ServerPort"] = BridgeImporter.ServerPort.ToString();
-		dict["Scale"] = BridgeImporter.Scale.ToString();
 		dict["LodIncrement"] = BridgeImporter.LodIncrement.ToString();
 
 		var jsonOutput = JsonSerializer.Serialize( dict );
