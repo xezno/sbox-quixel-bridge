@@ -1,10 +1,9 @@
-﻿using Tools;
+﻿using System.Collections.Generic;
+using Tools;
 
 /*
  * TODO:
  * - BUG: Figure out whether I was fucking up somewhere or whether SetStylesheetFile actually doesn't work
- * - Find a nice way to open a dialog and tell the user that their settings have been saved
- * - Clean everything up a little
  */
 namespace QuixelBridge;
 
@@ -26,10 +25,13 @@ public partial class SettingsWindow : Window
 		ResizeButtonsVisible = false;
 		CloseButtonVisible = false;
 
-		Load();
+		LoadSettings();
 		CreateUI();
 		Show();
 	}
+
+	ComboBox entityEdit;
+	LineEdit serverPortEdit, lodIncrementEdit;
 
 	public void CreateUI()
 	{
@@ -46,62 +48,82 @@ public partial class SettingsWindow : Window
 		//
 		// Addon Settings
 		//
-		AddTitle( "Addon Settings", w );
-		var addonSettings = new Widget( w );
-		addonSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		addonSettings.SetLayout( LayoutMode.TopToBottom );
+		{
+			AddTitle( "Addon Settings", w );
+			var addonSettings = new Widget( w );
+			addonSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+			addonSettings.SetLayout( LayoutMode.TopToBottom );
 
-		var addonName = AddAddonPicker( "Export Addon", addonSettings, Utility.Addons.GetAll() );
-		w.Layout.Add( addonSettings );
+			var addonName = AddAddonPicker( "Export Addon", addonSettings, Utility.Addons.GetAll() );
+			w.Layout.Add( addonSettings );
+		}
 
 		//
 		// Import Settings
 		//
-		AddTitle( "Import Settings", w );
-		var importSettings = new Widget( w );
-		importSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		importSettings.SetLayout( LayoutMode.TopToBottom );
+		{
+			AddTitle( "Import Settings", w );
+			var importSettings = new Widget( w );
+			importSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+			importSettings.SetLayout( LayoutMode.TopToBottom );
 
-		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Settings.Entity );
-		var serverPortEdit = AddNumberEdit( "Server port", importSettings, false, BridgeImporter.Settings.ServerPort.ToString() );
-		var lodIncrementEdit = AddNumberEdit( "LOD increment", importSettings, false, BridgeImporter.Settings.LodIncrement.ToString() );
+			var validEntities = new List<string>() { "prop_static", "prop_physics", "prop_dynamic" };
 
-		w.Layout.Add( importSettings );
+			entityEdit = AddComboBox( "Prop Type",
+								   importSettings,
+								   validEntities,
+								   BridgeImporter.Settings.Entity );
+
+			serverPortEdit = AddNumberEdit( "Server port",
+										 importSettings,
+										 false,
+										 BridgeImporter.Settings.ServerPort.ToString() );
+
+			lodIncrementEdit = AddNumberEdit( "LOD increment",
+										   importSettings,
+										   false,
+										   BridgeImporter.Settings.LodIncrement.ToString() );
+
+			w.Layout.Add( importSettings );
+		}
 
 		//
 		// Buttons
 		//
-		var buttons = new Widget( w );
-		buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		buttons.SetLayout( LayoutMode.LeftToRight );
-		buttons.Layout.AddStretchCell();
-
-		var cancelButton = new Button( "Cancel", "close", buttons );
-		cancelButton.SetStyles( "margin-right: 4px; background-color: #201f21; border: 0px;" );
-		cancelButton.Clicked += () =>
 		{
-			Close();
-		};
+			var buttons = new Widget( w );
+			buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+			buttons.SetLayout( LayoutMode.LeftToRight );
+			buttons.Layout.AddStretchCell();
 
-		buttons.Layout.Add( cancelButton );
+			var cancelButton = new Button( "Cancel", "close", buttons );
+			cancelButton.SetStyles( "margin-right: 4px; background-color: #201f21; border: 0px;" );
+			cancelButton.Clicked += () =>
+			{
+				Close();
+			};
 
-		var saveButton = new Button( "Save and Close", "save", buttons );
-		saveButton.SetStyles( "background-color: #201f21; border: 0px;" );
-		saveButton.Clicked += () =>
-		{
-			BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
-			BridgeImporter.Settings.ServerPort = int.Parse( serverPortEdit.Text );
-			BridgeImporter.Settings.LodIncrement = float.Parse( lodIncrementEdit.Text );
-			BridgeImporter.Settings.Entity = entityEdit.CurrentText;
+			buttons.Layout.Add( cancelButton );
 
-			Save();
-			Close();
-		};
+			var saveButton = new Button( "Save and Close", "save", buttons );
+			saveButton.SetStyles( "background-color: #201f21; border: 0px;" );
+			saveButton.Clicked += () =>
+			{
+				BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
+				BridgeImporter.Settings.ServerPort = int.Parse( serverPortEdit.Text );
+				BridgeImporter.Settings.LodIncrement = float.Parse( lodIncrementEdit.Text );
+				BridgeImporter.Settings.Entity = entityEdit.CurrentText;
 
-		buttons.Layout.Add( saveButton );
-		buttons.SetStyles( "margin-top: 10px;" );
+				SaveSettings();
+				Close();
+			};
 
-		w.Layout.Add( buttons );
+			buttons.Layout.Add( saveButton );
+			buttons.SetStyles( "margin-top: 10px;" );
+
+			w.Layout.Add( buttons );
+		}
+
 		Canvas = w;
 	}
 

@@ -10,8 +10,8 @@ namespace QuixelBridge;
 public class BridgeImporter
 {
 	private BridgeServer listener;
-	public static BridgeSettings Settings { get; set; } = new();
 
+	public static BridgeSettings Settings { get; set; } = new();
 	public static BridgeImporter Instance { get; set; }
 
 	public void Run()

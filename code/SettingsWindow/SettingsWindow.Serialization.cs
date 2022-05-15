@@ -5,7 +5,7 @@ namespace QuixelBridge;
 
 partial class SettingsWindow
 {
-	private static void Load()
+	private static void LoadSettings()
 	{
 		if ( !File.Exists( "quixel_settings.json" ) )
 			return;
@@ -16,7 +16,7 @@ partial class SettingsWindow
 		BridgeImporter.Settings = settings;
 	}
 
-	private static void Save()
+	private static void SaveSettings()
 	{
 		var jsonOutput = JsonSerializer.Serialize( BridgeImporter.Settings );
 		File.WriteAllText( "quixel_settings.json", jsonOutput );
