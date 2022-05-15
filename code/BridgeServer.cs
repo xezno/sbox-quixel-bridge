@@ -127,7 +127,7 @@ class BridgeServer
 					importQueue.Add( clientMessage );
 					queueDirty = true;
 				}
-				catch ( Exception ex )
+				catch ( Exception )
 				{
 					if ( isRunning )
 						throw;
