@@ -62,9 +62,9 @@ public partial class SettingsWindow : Window
 		importSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 		importSettings.SetLayout( LayoutMode.TopToBottom );
 
-		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Entity );
-		var serverPortEdit = AddNumberEdit( "Server port", importSettings, false, BridgeImporter.ServerPort.ToString() );
-		var lodIncrementEdit = AddNumberEdit( "LOD increment", importSettings, false, BridgeImporter.LodIncrement.ToString() );
+		var entityEdit = AddComboBox( "Prop Type", importSettings, new() { "prop_static", "prop_physics", "prop_dynamic" }, BridgeImporter.Settings.Entity );
+		var serverPortEdit = AddNumberEdit( "Server port", importSettings, false, BridgeImporter.Settings.ServerPort.ToString() );
+		var lodIncrementEdit = AddNumberEdit( "LOD increment", importSettings, false, BridgeImporter.Settings.LodIncrement.ToString() );
 
 		w.Layout.Add( importSettings );
 
@@ -89,10 +89,10 @@ public partial class SettingsWindow : Window
 		saveButton.SetStyles( "background-color: #201f21; border: 0px;" );
 		saveButton.Clicked += () =>
 		{
-			BridgeImporter.ProjectPath = SelectedAddonPath;
-			BridgeImporter.ServerPort = int.Parse( serverPortEdit.Text );
-			BridgeImporter.LodIncrement = float.Parse( lodIncrementEdit.Text );
-			BridgeImporter.Entity = entityEdit.CurrentText;
+			BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
+			BridgeImporter.Settings.ServerPort = int.Parse( serverPortEdit.Text );
+			BridgeImporter.Settings.LodIncrement = float.Parse( lodIncrementEdit.Text );
+			BridgeImporter.Settings.Entity = entityEdit.CurrentText;
 
 			Save();
 			Close();
