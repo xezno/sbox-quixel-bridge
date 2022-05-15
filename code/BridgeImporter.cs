@@ -18,8 +18,6 @@ public class BridgeImporter
 	{
 		Instance = this;
 
-		Settings.ProjectPath = Settings.ProjectPath.NormalizeFilename();
-
 		// Starts the server in background.
 		listener = new BridgeServer( Settings.ServerPort );
 		listener.StartServer();
@@ -39,7 +37,7 @@ public class BridgeImporter
 			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
 				Mesh mesh = quixelAsset.Meshes[i];
-				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" ).NormalizePath();
+				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" ).NormalizeFilename();
 
 				progressBar.SetSubtitle( "Compiling... (2/2)" );
 				progressBar.SetValues( 0.66f, 1.0f );
@@ -93,8 +91,6 @@ public class BridgeImporter
 
 				path += $"{cat.ToSourceName()}/";
 			}
-
-			path = path.NormalizePath();
 		}
 
 		//
@@ -212,7 +208,7 @@ public class BridgeImporter
 		// Get all used textures
 		quixelAsset.Textures.ForEach( texture =>
 		{
-			var path = texture.Path.PathRelativeTo( Settings.ProjectPath ).NormalizePath();
+			var path = texture.Path.PathRelativeTo( Settings.ProjectPath ).NormalizeFilename();
 			switch ( texture.Type )
 			{
 				case "albedo":
@@ -282,7 +278,7 @@ public class BridgeImporter
 			var baseMesh = new Template( "templates/Mesh.template" );
 			meshes += baseMesh.Parse( new()
 			{
-				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( Settings.ProjectPath ).NormalizePath() }
+				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( Settings.ProjectPath ).NormalizeFilename() }
 			} );
 		}
 

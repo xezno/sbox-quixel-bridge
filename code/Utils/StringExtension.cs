@@ -23,15 +23,4 @@ public static class StringExtension
 	{
 		return str.Replace( relativePath + "/", "" );
 	}
-
-	/// <summary>
-	/// Normalize path so that it uses "/" as separating character
-	/// </summary>
-	public static string NormalizePath( this string str )
-	{
-		var res = str;
-		res = res.Replace( "\\", "/" );
-
-		return res;
-	}
 }
