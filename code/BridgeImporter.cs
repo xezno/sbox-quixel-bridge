@@ -91,7 +91,7 @@ public class BridgeImporter
 		// Set location path
 		//
 		{
-			path = $"{ProjectPath}/";
+			path = $"{ProjectPath}/megascans/";
 			foreach ( var cat in quixelAsset.Categories )
 			{
 				if ( cat == "3d" || cat == "2d" || cat == "surface" )

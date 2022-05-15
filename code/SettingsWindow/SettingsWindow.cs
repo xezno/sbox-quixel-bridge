@@ -1,5 +1,4 @@
-﻿using System.Reflection.Emit;
-using Tools;
+﻿using Tools;
 
 /*
  * TODO:
@@ -37,7 +36,6 @@ public partial class SettingsWindow : Window
 		Clear();
 
 		StatusBar.Visible = false;
-
 
 		var w = new Widget( null );
 		w.SetLayout( LayoutMode.TopToBottom );
