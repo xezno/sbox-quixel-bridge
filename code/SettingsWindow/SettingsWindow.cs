@@ -74,14 +74,12 @@ public partial class SettingsWindow : Window
 								   validEntities,
 								   BridgeImporter.Settings.Entity );
 
-			serverPortEdit = AddNumberEdit( "Server port",
+			serverPortEdit = AddLineEdit( "Server port",
 										 importSettings,
-										 false,
 										 BridgeImporter.Settings.ServerPort.ToString() );
 
-			lodIncrementEdit = AddNumberEdit( "LOD increment",
+			lodIncrementEdit = AddLineEdit( "LOD increment",
 										   importSettings,
-										   false,
 										   BridgeImporter.Settings.LodIncrement.ToString() );
 
 			w.Layout.Add( importSettings );
