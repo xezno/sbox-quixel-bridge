@@ -78,7 +78,7 @@ partial class SettingsWindow
 	{
 		var label = new Label( text );
 		label.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		label.SetStyles( "color: gray;" );
+		label.SetStyles( "font-size: 8pt; color: rgba( 255, 255, 255, 0.3 );" );
 
 		parent.Add( label, 1 );
 
@@ -89,7 +89,7 @@ partial class SettingsWindow
 	{
 		var label = new Label( text );
 		label.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		label.SetStyles( "color: white; font-size: 12px;" );
+		label.SetStyles( "font-weight: 450; font-size: 9pt; color: rgba( 255, 255, 255, 0.9 );" );
 
 		parent.Add( label, 1 );
 

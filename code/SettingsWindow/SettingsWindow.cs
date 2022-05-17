@@ -105,6 +105,7 @@ public partial class SettingsWindow : Dialog
 			buttons.Layout.Spacing = 8;
 
 			var saveButton = new Button( "Save and Close", buttons );
+			saveButton.ButtonType = "primary";
 			saveButton.Clicked += () =>
 			{
 				BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
