@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Tools;
 
 /*
@@ -100,9 +101,24 @@ public partial class SettingsWindow : Dialog
 			var buttons = new Widget( this );
 			buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 			buttons.SetLayout( LayoutMode.LeftToRight );
-			buttons.Layout.AddStretchCell();
 			buttons.Layout.Margin = 20;
 			buttons.Layout.Spacing = 8;
+
+			// Dumb way of getting a button to look like a link, can't find any other good way to do this
+			// (adding a label with <a> tags doesn't work)
+			var link = new Button( "View on GitHub" );
+			link.SetStyles( "padding: 0; background-color: transparent; text-decoration: underline; text-align: left; border: none; width: auto;" );
+			link.Clicked += () =>
+			{
+				var githubUrl = "https://github.com/xezno/sbox-quixel-bridge";
+				Process.Start( new ProcessStartInfo( githubUrl )
+				{
+					UseShellExecute = true
+				} );
+			};
+
+			buttons.Layout.Add( link, 1 );
+			buttons.Layout.AddStretchCell();
 
 			var saveButton = new Button( "Save and Close", buttons );
 			saveButton.ButtonType = "primary";
