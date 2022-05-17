@@ -6,30 +6,24 @@ namespace QuixelBridge;
 
 partial class SettingsWindow
 {
-	private static LineEdit AddLineEdit( string label, Widget parent, string value = "" )
+	private static LineEdit AddLineEdit( string label, string subtitle, Layout parent, string value = "" )
 	{
-		var widget = new PropertyRow( parent );
-		widget.SetLabel( label );
-		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+		AddTitle( label, parent );
+		AddSubtitle( subtitle, parent );
 
-		var lineEdit = new LineEdit( value, parent );
-		lineEdit.SetStyles( "padding: 2px; background-color: #201f21; border-radius: 2px; margin-top: 5px;" );
-		widget.Layout.Add( lineEdit, 1 );
-
-		parent.Layout.Add( widget );
+		var lineEdit = new LineEdit( value );
+		parent.Add( lineEdit, 1 );
 
 		return lineEdit;
 	}
 
 	private static string SelectedAddonPath;
-	private static ComboBox AddAddonPicker( string label, Widget parent, IReadOnlyList<LocalAddon> addons )
+	private static ComboBox AddAddonPicker( string title, string subtitle, Layout parent, IReadOnlyList<LocalAddon> addons )
 	{
-		var widget = new PropertyRow( parent );
-		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		widget.SetLabel( label );
+		AddTitle( title, parent );
+		AddSubtitle( subtitle, parent );
 
-		var comboBox = new ComboBox( parent );
-		comboBox.SetStyles( "background-color: #201f21;" );
+		var comboBox = new ComboBox();
 
 		int comboBoxIndex = 0;
 		for ( int i = 0; i < addons.Count; i++ )
@@ -50,19 +44,15 @@ partial class SettingsWindow
 			comboBoxIndex++;
 		}
 
-		widget.Layout.Add( comboBox, 1 );
-		parent.Layout.Add( widget );
-
+		parent.Add( comboBox, 1 );
 		return comboBox;
 	}
-	private static ComboBox AddComboBox( string label, Widget parent, List<string> items, string selectedItem )
+	private static ComboBox AddComboBox( string label, string subtitle, Layout parent, List<string> items, string selectedItem )
 	{
-		var widget = new PropertyRow( parent );
-		widget.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		widget.SetLabel( label );
+		AddTitle( label, parent );
+		AddSubtitle( subtitle, parent );
 
-		var comboBox = new ComboBox( parent );
-		comboBox.SetStyles( "background-color: #201f21;" );
+		var comboBox = new ComboBox();
 
 		foreach ( var item in items )
 		{
@@ -71,9 +61,7 @@ partial class SettingsWindow
 
 		comboBox.TrySelectNamed( selectedItem );
 
-		widget.Layout.Add( comboBox, 1 );
-		parent.Layout.Add( widget );
-
+		parent.Add( comboBox, 1 );
 		return comboBox;
 	}
 
@@ -86,13 +74,24 @@ partial class SettingsWindow
 		return icon;
 	}
 
-	private static Label AddTitle( string text, Widget parent )
+	private static Label AddSubtitle( string text, Layout parent )
 	{
-		var label = new Label( text, parent );
+		var label = new Label( text );
 		label.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-		label.SetStyles( "color: white;" );
+		label.SetStyles( "color: gray;" );
 
-		parent.Layout.Add( label, 1 );
+		parent.Add( label, 1 );
+
+		return label;
+	}
+
+	private static Label AddTitle( string text, Layout parent )
+	{
+		var label = new Label( text );
+		label.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
+		label.SetStyles( "color: white; font-size: 12px;" );
+
+		parent.Add( label, 1 );
 
 		return label;
 	}

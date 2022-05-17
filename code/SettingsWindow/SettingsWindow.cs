@@ -8,22 +8,20 @@ using Tools;
 namespace QuixelBridge;
 
 [Tool( "Bridge Settings", "settings", "Settings for the Quixel Bridge plugin" )]
-public partial class SettingsWindow : Window
+public partial class SettingsWindow : Dialog
 {
 	[Menu( "Editor", "Quixel/Settings", "settings" )]
 	public static void OpenWindow()
 	{
-		_ = new SettingsWindow();
+		_ = new SettingsWindow( null );
 	}
 
-	public SettingsWindow()
+	public SettingsWindow( Widget parent ) : base( null )
 	{
-		Title = "Quixel Bridge Settings";
-		Size = new Vector2( 400, 300 );
-		MaximumSize = Size;
-		MinimumSize = Size;
-		ResizeButtonsVisible = false;
-		CloseButtonVisible = false;
+		Window.Title = "Quixel Bridge Settings";
+		Window.SetWindowIcon( "settings" );
+		Window.Size = new Vector2( 400, 200 );
+		Window.MaximumSize = Size;
 
 		LoadSettings();
 		CreateUI();
@@ -35,76 +33,78 @@ public partial class SettingsWindow : Window
 
 	public void CreateUI()
 	{
-		Clear();
-
-		StatusBar.Visible = false;
-
-		var w = new Widget( null );
-		w.SetLayout( LayoutMode.TopToBottom );
-		w.SetSizeMode( SizeMode.Default, SizeMode.Default );
-		w.Layout.Margin = new( 8 );
-		w.SetStyles( "background-color: #38393c; border-radius: 2px;" );
+		SetLayout( LayoutMode.TopToBottom );
+		Layout.Spacing = 4;
 
 		//
 		// Addon Settings
 		//
 		{
-			AddTitle( "Addon Settings", w );
-			var addonSettings = new Widget( w );
-			addonSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-			addonSettings.SetLayout( LayoutMode.TopToBottom );
+			var addonSettings = Layout.Add( LayoutMode.TopToBottom );
+			addonSettings.Margin = 20;
+			addonSettings.Spacing = 8;
 
-			var addonName = AddAddonPicker( "Export Addon", addonSettings, Utility.Addons.GetAll() );
-			w.Layout.Add( addonSettings );
+			var addonName = AddAddonPicker(
+				"Export Addon",
+				"The addon where your imports will get sent to",
+				addonSettings,
+				Utility.Addons.GetAll() );
 		}
+
+		Layout.AddStretchCell( 1 );
+		Layout.AddSeparator();
+		Layout.AddStretchCell( 1 );
 
 		//
 		// Import Settings
 		//
 		{
-			AddTitle( "Import Settings", w );
-			var importSettings = new Widget( w );
-			importSettings.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-			importSettings.SetLayout( LayoutMode.TopToBottom );
+			var importSettings = Layout.Add( LayoutMode.TopToBottom );
+			importSettings.Margin = 20;
+			importSettings.Spacing = 8;
 
 			var validEntities = new List<string>() { "prop_static", "prop_physics", "prop_dynamic" };
 
-			entityEdit = AddComboBox( "Prop Type",
-								   importSettings,
-								   validEntities,
-								   BridgeImporter.Settings.Entity );
+			entityEdit = AddComboBox(
+				"Entity Type",
+				"The entity type each imported model will use",
+				importSettings,
+				validEntities,
+				BridgeImporter.Settings.Entity );
 
-			serverPortEdit = AddLineEdit( "Server port",
-										 importSettings,
-										 BridgeImporter.Settings.ServerPort.ToString() );
+			importSettings.AddSpacingCell( 8 );
 
-			lodIncrementEdit = AddLineEdit( "LOD increment",
-										   importSettings,
-										   BridgeImporter.Settings.LodIncrement.ToString() );
+			serverPortEdit = AddLineEdit(
+				"Server port",
+				"The port to listen on (should be the same in Quixel Bridge)",
+				importSettings,
+				BridgeImporter.Settings.ServerPort.ToString() );
 
-			w.Layout.Add( importSettings );
+			importSettings.AddSpacingCell( 8 );
+
+			lodIncrementEdit = AddLineEdit(
+				"LOD increment",
+				"How often LODs should get switched out",
+				importSettings,
+				BridgeImporter.Settings.LodIncrement.ToString() );
 		}
+
+		Layout.AddStretchCell( 1 );
+		Layout.AddSeparator();
+		Layout.AddStretchCell( 1 );
 
 		//
 		// Buttons
 		//
 		{
-			var buttons = new Widget( w );
+			var buttons = new Widget( this );
 			buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
 			buttons.SetLayout( LayoutMode.LeftToRight );
 			buttons.Layout.AddStretchCell();
+			buttons.Layout.Margin = 20;
+			buttons.Layout.Spacing = 8;
 
-			var cancelButton = new Button( "Cancel", "close", buttons );
-			cancelButton.SetStyles( "margin-right: 4px; background-color: #201f21; border: 0px;" );
-			cancelButton.Clicked += () =>
-			{
-				Close();
-			};
-
-			buttons.Layout.Add( cancelButton );
-
-			var saveButton = new Button( "Save and Close", "save", buttons );
-			saveButton.SetStyles( "background-color: #201f21; border: 0px;" );
+			var saveButton = new Button( "Save and Close", buttons );
 			saveButton.Clicked += () =>
 			{
 				BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
@@ -116,13 +116,17 @@ public partial class SettingsWindow : Window
 				Close();
 			};
 
+			var cancelButton = new Button( "Cancel", buttons );
+			cancelButton.Clicked += () =>
+			{
+				Close();
+			};
+
 			buttons.Layout.Add( saveButton );
-			buttons.SetStyles( "margin-top: 10px;" );
+			buttons.Layout.Add( cancelButton );
 
-			w.Layout.Add( buttons );
+			Layout.Add( buttons );
 		}
-
-		Canvas = w;
 	}
 
 	[Sandbox.Event.Hotload]
