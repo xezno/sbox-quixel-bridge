@@ -110,7 +110,7 @@ public partial class SettingsWindow : Dialog
 			link.SetStyles( "padding: 0; background-color: transparent; text-decoration: underline; text-align: left; border: none; width: auto;" );
 			link.Clicked += () =>
 			{
-				var githubUrl = "https://github.com/xezno/sbox-quixel-bridge";
+				var githubUrl = "https://github.com/xezno/sbox-quixel-bridge#readme";
 				Process.Start( new ProcessStartInfo( githubUrl )
 				{
 					UseShellExecute = true
