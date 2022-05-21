@@ -1,11 +1,13 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Linq;
+using System.Text.Json.Serialization;
+using Tools;
 
 namespace QuixelBridge;
 
 public class BridgeSettings
 {
 	[JsonPropertyName( "ProjectPath" )]
-	public string ProjectPath { get; set; } = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\megascans";
+	public string ProjectPath { get; set; }
 
 	[JsonPropertyName( "ServerPort" )]
 	public int ServerPort { get; set; } = 24981;
@@ -15,4 +17,9 @@ public class BridgeSettings
 
 	[JsonPropertyName( "Entity" )]
 	public string Entity { get; set; } = "prop_static";
+
+	public BridgeSettings()
+	{
+		ProjectPath = Utility.Addons.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
+	}
 }
