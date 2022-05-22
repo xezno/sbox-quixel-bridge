@@ -65,6 +65,18 @@ partial class SettingsWindow
 		return comboBox;
 	}
 
+	private static CheckBox AddCheckBox( string label, string subtitle, Layout parent, bool enabled )
+	{
+		AddTitle( label, parent );
+		AddSubtitle( subtitle, parent );
+
+		var checkBox = new CheckBox();
+		checkBox.Value = enabled;
+
+		parent.Add( checkBox, 1 );
+		return checkBox;
+	}
+
 	private static string GetAddonIcon( LocalAddon addon )
 	{
 		string icon = "folder";

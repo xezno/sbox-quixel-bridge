@@ -24,13 +24,14 @@ public partial class SettingsWindow : Dialog
 		Window.Size = new Vector2( 400, 200 );
 		Window.MaximumSize = Size;
 
-		LoadSettings();
+		BridgeSettings.LoadSettings();
 		CreateUI();
 		Show();
 	}
 
 	ComboBox entityEdit;
 	LineEdit serverPortEdit, lodIncrementEdit;
+	CheckBox audioEnabledEdit;
 
 	public void CreateUI()
 	{
@@ -88,6 +89,14 @@ public partial class SettingsWindow : Dialog
 				"How often LODs should get switched out",
 				importSettings,
 				BridgeImporter.Settings.LodIncrement.ToString() );
+
+			importSettings.AddSpacingCell( 8 );
+
+			audioEnabledEdit = AddCheckBox(
+				"Play Sound on Complete",
+				"Sound will only play if you have more than one item in the queue",
+				importSettings,
+				BridgeImporter.Settings.EnableAudio );
 		}
 
 		Layout.AddStretchCell( 1 );
@@ -128,8 +137,9 @@ public partial class SettingsWindow : Dialog
 				BridgeImporter.Settings.ServerPort = int.Parse( serverPortEdit.Text );
 				BridgeImporter.Settings.LodIncrement = float.Parse( lodIncrementEdit.Text );
 				BridgeImporter.Settings.Entity = entityEdit.CurrentText;
+				BridgeImporter.Settings.EnableAudio = audioEnabledEdit.Value;
 
-				SaveSettings();
+				BridgeSettings.SaveSettings();
 				Close();
 			};
 

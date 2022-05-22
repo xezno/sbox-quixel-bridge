@@ -17,6 +17,7 @@ public class BridgeImporter
 	public void Run()
 	{
 		Instance = this;
+		BridgeSettings.LoadSettings();
 
 		// Starts the server in background.
 		listener = new BridgeServer( Settings.ServerPort );

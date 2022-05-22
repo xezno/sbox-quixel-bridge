@@ -91,6 +91,17 @@ class BridgeServer
 				await BridgeImporter.Instance.ImportFrom( progressBar, quixelAsset );
 			}
 
+			//
+			// Play a "success" chime if the queue has more than 1 item in it and the
+			// user has the chime enabled
+			//
+			if ( quixelAssets.Length > 1 && BridgeImporter.Settings.EnableAudio )
+			{
+				var handle = Audio.Play( "quixel_import_success" );
+				handle.Position = Vector3.Zero;
+				handle.ListenLocal = true;
+			}
+
 			await Task.Delay( 1000 ); // Give the user an extra second to see that we completed
 
 			progressList.ForEach( x => x.Dispose() );
