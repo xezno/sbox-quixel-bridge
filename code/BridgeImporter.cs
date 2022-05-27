@@ -11,7 +11,6 @@ public class BridgeImporter
 {
 	private BridgeServer listener;
 
-	public static BridgeSettings Settings { get; set; } = new();
 	public static BridgeImporter Instance { get; set; }
 
 	public void Run()
@@ -20,7 +19,7 @@ public class BridgeImporter
 		BridgeSettings.LoadSettings();
 
 		// Starts the server in background.
-		listener = new BridgeServer( Settings.ServerPort );
+		listener = new BridgeServer( BridgeSettings.Instance.ServerPort );
 		listener.StartServer();
 	}
 
@@ -33,7 +32,10 @@ public class BridgeImporter
 	{
 		if ( ExportAsset( quixelAsset, out string path ) )
 		{
-			var relativePath = Path.GetRelativePath( Settings.ProjectPath, path );
+			if ( BridgeSettings.Instance.ProjectPath == null )
+				Log.Error( "literally how" );
+
+			var relativePath = Path.GetRelativePath( BridgeSettings.Instance.ProjectPath, path );
 
 			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
@@ -84,7 +86,7 @@ public class BridgeImporter
 		// Set location path
 		//
 		{
-			path = $"{Settings.ProjectPath}/megascans/";
+			path = $"{BridgeSettings.Instance.ProjectPath}/megascans/";
 			foreach ( var cat in quixelAsset.Categories )
 			{
 				if ( cat == "3d" || cat == "2d" || cat == "surface" )
@@ -209,7 +211,7 @@ public class BridgeImporter
 		// Get all used textures
 		quixelAsset.Textures.ForEach( texture =>
 		{
-			var path = texture.Path.PathRelativeTo( Settings.ProjectPath ).NormalizeFilename();
+			var path = texture.Path.PathRelativeTo( BridgeSettings.Instance.ProjectPath ).NormalizeFilename();
 			switch ( texture.Type )
 			{
 				case "albedo":
@@ -251,7 +253,7 @@ public class BridgeImporter
 
 	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
 	{
-		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( Settings.ProjectPath )}materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
+		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( BridgeSettings.Instance.ProjectPath )}materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 		var vmdlPath = $"{quixelAsset.Path}{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl";
 
 		var meshes = "";
@@ -272,14 +274,14 @@ public class BridgeImporter
 			var baseLod = new Template( "templates/Lod.template" );
 			lods += baseLod.Parse( new()
 			{
-				{ "Threshold", (i * Settings.LodIncrement).ToString() },
+				{ "Threshold", (i * BridgeSettings.Instance.LodIncrement).ToString() },
 				{ "Mesh", $"unnamed_{i + 1}" }
 			} );
 
 			var baseMesh = new Template( "templates/Mesh.template" );
 			meshes += baseMesh.Parse( new()
 			{
-				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( Settings.ProjectPath ).NormalizeFilename() }
+				{ "Mesh", quixelAsset.LODs[i].Path.PathRelativeTo( BridgeSettings.Instance.ProjectPath ).NormalizeFilename() }
 			} );
 		}
 
@@ -291,7 +293,7 @@ public class BridgeImporter
 			{ "Material", vmatPath },
 			{ "Lods", lods },
 			{ "Meshes", meshes },
-			{ "Entity", Settings.Entity }
+			{ "Entity", BridgeSettings.Instance.Entity }
 		} ) );
 
 		return true;

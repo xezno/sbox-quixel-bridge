@@ -8,7 +8,6 @@ using Tools;
  */
 namespace QuixelBridge;
 
-[Tool( "Bridge Settings", "settings", "Settings for the Quixel Bridge plugin" )]
 public partial class SettingsWindow : Dialog
 {
 	[Menu( "Editor", "Quixel/Settings", "settings" )]
@@ -72,7 +71,7 @@ public partial class SettingsWindow : Dialog
 				"The entity type each imported model will use",
 				importSettings,
 				validEntities,
-				BridgeImporter.Settings.Entity );
+				BridgeSettings.Instance.Entity );
 
 			importSettings.AddSpacingCell( 8 );
 
@@ -80,7 +79,7 @@ public partial class SettingsWindow : Dialog
 				"Server port",
 				"The port to listen on (should be the same in Quixel Bridge)",
 				importSettings,
-				BridgeImporter.Settings.ServerPort.ToString() );
+				BridgeSettings.Instance.ServerPort.ToString() );
 
 			importSettings.AddSpacingCell( 8 );
 
@@ -88,7 +87,7 @@ public partial class SettingsWindow : Dialog
 				"LOD increment",
 				"How often LODs should get switched out",
 				importSettings,
-				BridgeImporter.Settings.LodIncrement.ToString() );
+				BridgeSettings.Instance.LodIncrement.ToString() );
 
 			importSettings.AddSpacingCell( 8 );
 
@@ -96,7 +95,7 @@ public partial class SettingsWindow : Dialog
 				"Play Sound on Complete",
 				"Sound will only play if you have more than one item in the queue",
 				importSettings,
-				BridgeImporter.Settings.EnableAudio );
+				BridgeSettings.Instance.EnableAudio );
 		}
 
 		Layout.AddStretchCell( 1 );
@@ -133,11 +132,11 @@ public partial class SettingsWindow : Dialog
 			saveButton.ButtonType = "primary";
 			saveButton.Clicked += () =>
 			{
-				BridgeImporter.Settings.ProjectPath = SelectedAddonPath;
-				BridgeImporter.Settings.ServerPort = int.Parse( serverPortEdit.Text );
-				BridgeImporter.Settings.LodIncrement = float.Parse( lodIncrementEdit.Text );
-				BridgeImporter.Settings.Entity = entityEdit.CurrentText;
-				BridgeImporter.Settings.EnableAudio = audioEnabledEdit.Value;
+				BridgeSettings.Instance.ProjectPath = SelectedAddonPath;
+				BridgeSettings.Instance.ServerPort = int.Parse( serverPortEdit.Text );
+				BridgeSettings.Instance.LodIncrement = float.Parse( lodIncrementEdit.Text );
+				BridgeSettings.Instance.Entity = entityEdit.CurrentText;
+				BridgeSettings.Instance.EnableAudio = audioEnabledEdit.Value;
 
 				BridgeSettings.SaveSettings();
 				Close();

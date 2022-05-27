@@ -95,7 +95,7 @@ class BridgeServer
 			// Play a "success" chime if the queue has more than 1 item in it and the
 			// user has the chime enabled
 			//
-			if ( quixelAssets.Length > 1 && BridgeImporter.Settings.EnableAudio )
+			if ( quixelAssets.Length > 1 && BridgeSettings.Instance.EnableAudio )
 			{
 				var handle = Audio.Play( "quixel_import_success" );
 				handle.Position = Vector3.Zero;

@@ -26,6 +26,9 @@ public class BridgeSettings
 	[JsonIgnore]
 	private const string SettingsFile = "quixel_bridge_settings.json";
 
+	[JsonIgnore]
+	public static BridgeSettings Instance { get; set; }
+
 	public static void LoadSettings()
 	{
 		if ( !File.Exists( SettingsFile ) )
@@ -34,17 +37,14 @@ public class BridgeSettings
 		var jsonInput = File.ReadAllText( SettingsFile );
 		var settings = JsonSerializer.Deserialize<BridgeSettings>( jsonInput );
 
-		BridgeImporter.Settings = settings;
+		settings.ProjectPath ??= Utility.Addons.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
+
+		Instance = settings;
 	}
 
 	public static void SaveSettings()
 	{
-		var jsonOutput = JsonSerializer.Serialize( BridgeImporter.Settings );
+		var jsonOutput = JsonSerializer.Serialize( Instance );
 		File.WriteAllText( SettingsFile, jsonOutput );
-	}
-
-	public BridgeSettings()
-	{
-		ProjectPath = Utility.Addons.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
 	}
 }
