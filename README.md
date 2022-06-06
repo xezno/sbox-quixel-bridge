@@ -33,21 +33,34 @@ SOFTWARE.
 | Displacements | ✅ |
 | Brushes | ✅ |
 
-## Instructions
+
+## Setup
+
+You'll only need to do this stuff once.
+
+### s&box setup
+
+1. Download the plugin from [GitHub](https://github.com/xezno/sbox-quixel-bridge/releases/latest).
+2. Extract it somewhere permanent, e.g. next to all your other s&box addons.
+3. Add it through the s&box addon manager window ("Add" -> "From folder..").
+4. Click "Quixel" -> "Settings" in the s&box editor and select the addon you want to export to.
+5. Click "Save and Close" to apply the settings you've chosen.
 
 ### Bridge Setup
 
-1. Open Quixel Bridge (update to latest version if it asks you to)
-2. Open "Edit" -> "Export Settings"
-3. Change "Export Target" to "Custom Socket Export"
-4. Open the "Textures" tab in Export Settings
-5. Select "TGA" as format (not actually necessary, but seems to be faster - PNG and JPG are both also compatible, but will
-compile slower)
-6. Exit out of "Export Settings"
+1. Download Quixel Bridge from the [Quixel website](https://quixel.com/bridge).
+2. Open Quixel Bridge.
+3. Open "Edit" -> "Export Settings":
+   - Change "Export Target" to "Custom Socket Export"
+   - Open the "Textures" tab  and select "PNG" as the texture format
 
-### s&box Setup
+## Usage
 
-1. Download this repo
-2. Extract it somewhere permanent
-3. Add it through the s&box addon manager
-4. The "Quixel" menu should appear in the s&box editor. Click "Start Bridge Plugin" to open Bridge and start the plugin.
+After you've set everything up, using it is straightforward.
+
+1. Make sure the plugin is enabled in s&box - go into the "Quixel" menu in the editor, and hit "Start Bridge Plugin".
+2. Go to Quixel Bridge.
+3. Select an asset, click the green "Download" button.
+4. Once downloaded, the click the blue "Export" button.
+
+You can find your exported assets exported in the "megascans" directory in the root folder for the addon you picked.
