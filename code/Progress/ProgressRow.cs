@@ -93,7 +93,7 @@ public class ProgressRow : Widget
 		Paint.DrawRect( r );
 
 		Paint.SetPen( color.WithAlpha( 0.3f ) );
-		var iconRect = Paint.DrawMaterialIcon( rect.Contract( 16, 0 ), IconText, 32, TextFlag.LeftCenter );
+		var iconRect = Paint.DrawIcon( rect.Contract( 16, 0 ), IconText, 32, TextFlag.LeftCenter );
 
 		var contentRect = LocalRect;
 		contentRect.left += iconRect.right + 16;
