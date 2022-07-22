@@ -38,6 +38,12 @@ partial class SettingsWindow
 				SelectedAddonPath = addon.GetRootPath();
 			} );
 
+			if ( addon == null )
+				continue;
+
+			if ( BridgeSettings.Instance == null )
+				BridgeSettings.LoadSettings();
+
 			if ( addon.GetRootPath() == BridgeSettings.Instance.ProjectPath )
 				comboBox.CurrentIndex = comboBoxIndex;
 
