@@ -17,15 +17,14 @@ partial class SettingsWindow
 		return lineEdit;
 	}
 
-	private static string SelectedAddonPath;
 	private static ComboBox AddAddonPicker( string title, string subtitle, Layout parent, IReadOnlyList<LocalAddon> addons )
 	{
 		AddTitle( title, parent );
 		AddSubtitle( subtitle, parent );
 
 		var comboBox = new ComboBox();
-
 		int comboBoxIndex = 0;
+
 		for ( int i = 0; i < addons.Count; i++ )
 		{
 			LocalAddon addon = addons[i];
@@ -35,7 +34,7 @@ partial class SettingsWindow
 			string icon = GetAddonIcon( addon );
 			comboBox.AddItem( addon.Config.Title, icon, () =>
 			{
-				SelectedAddonPath = addon.GetRootPath();
+				selectedAddonPath = addon.GetRootPath();
 			} );
 
 			if ( addon == null )
@@ -50,6 +49,7 @@ partial class SettingsWindow
 		parent.Add( comboBox, 1 );
 		return comboBox;
 	}
+
 	private static ComboBox AddComboBox( string label, string subtitle, Layout parent, List<string> items, string selectedItem )
 	{
 		AddTitle( label, parent );
@@ -82,11 +82,16 @@ partial class SettingsWindow
 
 	private static string GetAddonIcon( LocalAddon addon )
 	{
-		string icon = "folder";
-		if ( addon.Config.Type == "map" ) icon = "public";
-		if ( addon.Config.Type == "game" ) icon = "sports_esports";
-		if ( addon.Config.Type == "content" ) icon = "perm_media";
-		return icon;
+		if ( addon.Config.Type == "map" )
+			return "public";
+
+		if ( addon.Config.Type == "game" )
+			return "sports_esports";
+
+		if ( addon.Config.Type == "content" )
+			return "perm_media";
+
+		return "folder";
 	}
 
 	private static Label AddSubtitle( string text, Layout parent )
