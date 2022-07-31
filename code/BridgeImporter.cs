@@ -26,7 +26,7 @@ public class BridgeImporter
 		listener.EndServer();
 	}
 
-	public async Task ImportFrom( Progress.ProgressBar progressBar, QuixelAsset quixelAsset )
+	public async Task ImportFrom( Progress.ProgressBar progressBar, BridgeAsset quixelAsset )
 	{
 		if ( ExportAsset( quixelAsset, out string path ) )
 		{
@@ -75,7 +75,7 @@ public class BridgeImporter
 		}
 	}
 
-	private bool ExportAsset( QuixelAsset quixelAsset, out string path )
+	private bool ExportAsset( BridgeAsset quixelAsset, out string path )
 	{
 		string dirName = new DirectoryInfo( quixelAsset.Path ).Name;
 		quixelAsset.DirectoryName = dirName;
@@ -127,7 +127,7 @@ public class BridgeImporter
 		return true;
 	}
 
-	private bool CopyFiles( ref QuixelAsset quixelAsset, string path )
+	private bool CopyFiles( ref BridgeAsset quixelAsset, string path )
 	{
 		// Create destination directories
 		Directory.CreateDirectory( path );
@@ -135,7 +135,7 @@ public class BridgeImporter
 		var assetPath = $"{path}assets";
 		Directory.CreateDirectory( assetPath );
 
-		void CopyAssets<T>( List<T> items, QuixelAsset asset, string subDir ) where T : IBaseAsset
+		void CopyAssets<T>( List<T> items, BridgeAsset asset, string subDir ) where T : IBaseAsset
 		{
 			var joinedSubDir = $"{assetPath}/{subDir}";
 			Directory.CreateDirectory( joinedSubDir );
@@ -174,7 +174,7 @@ public class BridgeImporter
 		return true;
 	}
 
-	private static bool CreateMaterial( QuixelAsset quixelAsset )
+	private static bool CreateMaterial( BridgeAsset quixelAsset )
 	{
 		var vmatPath = $"{quixelAsset.Path}materials/";
 		Directory.CreateDirectory( vmatPath );
@@ -233,6 +233,9 @@ public class BridgeImporter
 				case "displacement":
 					pairs["Displacement"] = path;
 					break;
+				case "translucency":
+					pairs["Translucency"] = path;
+					break;
 				case "transmission":
 					// TODO
 					break;
@@ -249,7 +252,7 @@ public class BridgeImporter
 		return true;
 	}
 
-	private static bool CreateModel( QuixelAsset quixelAsset, int meshIndex )
+	private static bool CreateModel( BridgeAsset quixelAsset, int meshIndex )
 	{
 		var vmatPath = $"{quixelAsset.Path.PathRelativeTo( BridgeSettings.Instance.ProjectPath )}materials/{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmat";
 		var vmdlPath = $"{quixelAsset.Path}{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl";

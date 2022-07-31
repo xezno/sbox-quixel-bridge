@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace QuixelBridge;
 
-public struct QuixelAsset
+public struct BridgeAsset
 {
 	[JsonPropertyName( "resolution" )]
 	public string Resolution { get; set; }

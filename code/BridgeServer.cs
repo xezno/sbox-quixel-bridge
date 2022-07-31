@@ -63,7 +63,7 @@ class BridgeServer
 			var progressList = new List<Progress.ProgressBar>();
 
 			var queueItem = importQueueCopy[0];
-			var quixelAssets = JsonSerializer.Deserialize<QuixelAsset[]>( queueItem );
+			var quixelAssets = JsonSerializer.Deserialize<BridgeAsset[]>( queueItem );
 
 			//
 			// Add to progress window
