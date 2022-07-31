@@ -23,7 +23,6 @@ public partial class SettingsWindow : Dialog
 		Window.Size = new Vector2( 400, 200 );
 		Window.MaximumSize = Size;
 
-		BridgeSettings.LoadSettings();
 		CreateUI();
 		Show();
 	}
@@ -138,7 +137,7 @@ public partial class SettingsWindow : Dialog
 				BridgeSettings.Instance.Entity = entityEdit.CurrentText;
 				BridgeSettings.Instance.EnableAudio = audioEnabledEdit.Value;
 
-				BridgeSettings.SaveSettings();
+				BridgeSettings.SaveToDisk();
 				Close();
 			};
 

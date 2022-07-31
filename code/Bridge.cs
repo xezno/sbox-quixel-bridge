@@ -9,6 +9,9 @@ public class Bridge
 
 	public Bridge()
 	{
+		// This needs to be called before everything
+		BridgeSettings.LoadFromDisk();
+
 		var menu = EditorWindow.MenuBar.FindOrCreateMenu( "Quixel" );
 		menu.AddSeparator();
 		menu.AddOption( "Open Quixel Bridge on Start", "open_in_new", () => Log.Trace( "Checked" ) );
