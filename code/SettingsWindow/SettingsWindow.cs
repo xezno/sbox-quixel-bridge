@@ -137,7 +137,7 @@ public partial class SettingsWindow : Dialog
 				BridgeSettings.Instance.Entity = entityEdit.CurrentText;
 				BridgeSettings.Instance.EnableAudio = audioEnabledEdit.Value;
 
-				BridgeSettings.SaveToDisk();
+				BridgeSettings.Instance.SaveToDisk();
 				Close();
 			};
 

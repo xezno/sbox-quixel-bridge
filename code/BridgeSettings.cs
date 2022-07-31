@@ -35,7 +35,7 @@ public class BridgeSettings
 		get
 		{
 			if ( instance == null )
-				LoadFromDisk();
+				instance = LoadFromDisk();
 
 			return instance;
 		}
@@ -45,39 +45,36 @@ public class BridgeSettings
 	/// Loads settings from disk, or creates a default settings file if
 	/// a settings file does not already exist.
 	/// </summary>
-	public static void LoadFromDisk()
+	private static BridgeSettings LoadFromDisk()
 	{
 		if ( !File.Exists( SettingsFile ) )
-		{
-			CreateDefaultSettings();
-			return;
-		}
+			return CreateDefaultSettings();
 
 		var jsonInput = File.ReadAllText( SettingsFile );
 		var settings = JsonSerializer.Deserialize<BridgeSettings>( jsonInput );
 
 		settings.ProjectPath ??= Utility.Addons.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
 
-		instance = settings;
+		return settings;
 	}
 
 	/// <summary>
 	/// Saves the current settings to disk.
 	/// </summary>
-	public static void SaveToDisk()
+	public void SaveToDisk()
 	{
-		var jsonOutput = JsonSerializer.Serialize( Instance );
+		var jsonOutput = JsonSerializer.Serialize( this );
 		File.WriteAllText( SettingsFile, jsonOutput );
 	}
 
 	/// <summary>
 	/// Create and save the default settings file.
 	/// </summary>
-	private static void CreateDefaultSettings()
+	private static BridgeSettings CreateDefaultSettings()
 	{
 		var settings = new BridgeSettings();
-		instance = settings;
+		settings.SaveToDisk();
 
-		SaveToDisk();
+		return settings;
 	}
 }

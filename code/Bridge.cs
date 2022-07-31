@@ -7,16 +7,6 @@ public class Bridge
 {
 	public static BridgeImporter Importer;
 
-	public Bridge()
-	{
-		// This needs to be called before everything
-		BridgeSettings.LoadFromDisk();
-
-		var menu = EditorWindow.MenuBar.FindOrCreateMenu( "Quixel" );
-		menu.AddSeparator();
-		menu.AddOption( "Open Quixel Bridge on Start", "open_in_new", () => Log.Trace( "Checked" ) );
-	}
-
 	[Menu( "Editor", "Quixel/Start Bridge Plugin", "play_arrow" )]
 	public static void StartBridge()
 	{
