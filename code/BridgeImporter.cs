@@ -35,24 +35,27 @@ public class BridgeImporter
 			for ( int i = 0; i < quixelAsset.Meshes.Count; i++ )
 			{
 				Mesh mesh = quixelAsset.Meshes[i];
-				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" ).NormalizeFilename();
+				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" );
 
 				progressBar.SetSubtitle( "Compiling... (2/2)" );
 				progressBar.SetValues( 0.66f, 1.0f );
 
-				await Task.Delay( 50 ); // Wait for asset to propagate through asset system
-				var asset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path == mdlPath );
+				// Locate imported s&box asset
+				var engineAsset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
 
-				if ( asset == null )
+				if ( engineAsset == null )
 				{
-					Log.Warning( $"Couldn't find the asset that just got exported? Did it fail?" );
+					Log.Info( $"Asset system didn't catch asset quickly enough - skipping auto-compile for asset '{quixelAsset.Name}'" );
 				}
 				else
 				{
-					asset.Compile( true ); // Force a full compile
+					// Force a full compile
+					engineAsset.Compile( true );
 
-					Log.Trace( $"Exported to: {asset}" );
-					Log.Trace( $"TODO: Highlight in asset browser" );
+					Log.Trace( $"Exported to: {engineAsset}" );
+
+					// Highlight in asset browser
+					Tools.MainAssetBrowser.Instance.FocusOnAsset( engineAsset );
 				}
 
 				progressBar.SetSubtitle( "Done." );
