@@ -45,7 +45,7 @@ public partial class SettingsWindow : Dialog
 				"Export Addon",
 				"The addon where your imports will get sent to",
 				addonSettings,
-				Utility.Addons.GetAll() );
+				Utility.Projects.GetAll() );
 		}
 
 		Layout.AddStretchCell( 1 );

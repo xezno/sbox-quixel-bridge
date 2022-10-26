@@ -3,6 +3,7 @@
   "Type": "tool",
   "Org": "local",
   "Ident": "quixel_bridge",
+  "Tags": null,
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "",

@@ -17,7 +17,7 @@ partial class SettingsWindow
 		return lineEdit;
 	}
 
-	private static ComboBox AddAddonPicker( string title, string subtitle, Layout parent, IReadOnlyList<LocalAddon> addons )
+	private static ComboBox AddAddonPicker( string title, string subtitle, Layout parent, IReadOnlyList<LocalProject> addons )
 	{
 		AddTitle( title, parent );
 		AddSubtitle( subtitle, parent );
@@ -27,7 +27,7 @@ partial class SettingsWindow
 
 		for ( int i = 0; i < addons.Count; i++ )
 		{
-			LocalAddon addon = addons[i];
+			LocalProject addon = addons[i];
 			if ( !addon.Active )
 				continue;
 
@@ -80,7 +80,7 @@ partial class SettingsWindow
 		return checkBox;
 	}
 
-	private static string GetAddonIcon( LocalAddon addon )
+	private static string GetAddonIcon( LocalProject addon )
 	{
 		if ( addon.Config.Type == "map" )
 			return "public";
