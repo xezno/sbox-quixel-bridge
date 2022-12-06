@@ -32,3 +32,4 @@ _bakeresourcecache/
 
 # Allowlist
 !*_dev.vpk
+tm-manifest.json

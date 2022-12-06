@@ -68,6 +68,6 @@ public class ProgressWindow : Window
 		Paint.Antialiasing = true;
 		Paint.SetPen( Theme.ControlBackground.Darken( 0.4f ), 2.0f );
 		Paint.SetBrush( Theme.ControlBackground );
-		Paint.DrawRect( LocalRect.Contract( 1 ), 0.0f );
+		Paint.DrawRect( LocalRect.Shrink( 1 ), 0.0f );
 	}
 }
