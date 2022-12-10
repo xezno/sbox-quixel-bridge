@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
-using Tools;
 
 namespace QuixelBridge;
 
@@ -47,7 +44,7 @@ class BridgeServer
 	// (we should probably just re-write the tcp listener
 	// code to work better in a single-thread context)
 	//
-	[Sandbox.Event.Frame]
+	[Event.Client.Frame]
 	public static void OnFrame()
 	{
 		if ( !queueDirty )

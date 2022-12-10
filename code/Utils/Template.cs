@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Tools;
-
-namespace QuixelBridge;
+﻿namespace QuixelBridge;
 
 /// <summary>
 /// Shitty simple template format parser

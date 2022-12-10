@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using Tools;
 
 public class ProgressWindow : Window
 {

@@ -1,8 +1,4 @@
-﻿using Sandbox;
-using System.Collections.Generic;
-using Tools;
-
-namespace QuixelBridge;
+﻿namespace QuixelBridge;
 
 partial class SettingsWindow
 {

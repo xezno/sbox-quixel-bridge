@@ -1,12 +1,4 @@
-﻿using Sandbox;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Tools;
-
-namespace QuixelBridge;
+﻿namespace QuixelBridge;
 
 public class BridgeImporter
 {
@@ -42,7 +34,7 @@ public class BridgeImporter
 				progressBar.SetValues( 0.66f, 1.0f );
 
 				// Locate imported s&box asset
-				var engineAsset = Tools.AssetSystem.All.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
+				var engineAsset = AssetSystem.All.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
 
 				if ( engineAsset == null )
 				{
@@ -56,7 +48,7 @@ public class BridgeImporter
 					Log.Trace( $"Exported to: {engineAsset}" );
 
 					// Highlight in asset browser
-					Tools.MainAssetBrowser.Instance.FocusOnAsset( engineAsset );
+					MainAssetBrowser.Instance.FocusOnAsset( engineAsset );
 				}
 
 				progressBar.SetSubtitle( "Done." );

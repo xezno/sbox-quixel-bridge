@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Tools;
-
-namespace QuixelBridge;
+﻿namespace QuixelBridge;
 
 public partial class SettingsWindow : Dialog
 {

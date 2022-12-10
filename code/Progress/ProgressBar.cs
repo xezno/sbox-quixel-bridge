@@ -1,7 +1,4 @@
-﻿using Sandbox;
-using Tools;
-
-public class ProgressBar : Widget
+﻿public class ProgressBar : Widget
 {
 	public ProgressBar( Widget parent = null ) : base( parent )
 	{

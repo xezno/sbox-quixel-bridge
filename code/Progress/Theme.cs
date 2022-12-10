@@ -1,6 +1,4 @@
-﻿using Sandbox;
-
-public static class Theme
+﻿public static class Theme
 {
 	public static Color White;
 	public static Color Grey;
