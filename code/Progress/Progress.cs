@@ -6,7 +6,7 @@ public static class Progress
 	static ProgressWindow currentWindow;
 	static int Popups;
 
-	class ProgressSection : IDisposable
+	public class ProgressSection : IDisposable
 	{
 		bool disposed;
 		string oldTitle;

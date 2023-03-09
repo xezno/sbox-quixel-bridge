@@ -39,14 +39,9 @@ class BridgeServer
 		tcpListener.Stop();
 	}
 
-	//
-	// Shit way of running things on the main thread
-	// (we should probably just re-write the tcp listener
-	// code to work better in a single-thread context)
-	//
-	[Event.Client.Frame]
-	public static void OnFrame()
+	public static void Import()
 	{
+		Log.Trace( "Frame" );
 		if ( !queueDirty )
 			return;
 
@@ -55,57 +50,41 @@ class BridgeServer
 		queueDirty = false;
 		importQueue.Clear();
 
-		var asyncTask = async () =>
+		var queueItem = importQueueCopy[0];
+		var quixelAssets = JsonSerializer.Deserialize<BridgeAsset[]>( queueItem );
+
+		//
+		// Add to progress window
+		//
+		for ( int i = 0; i < quixelAssets.Length; i++ )
 		{
-			using var progress = Progress.Start( "Importing from Quixel Bridge..." );
-			var progressList = new List<Progress.ProgressBar>();
+			var quixelAsset = quixelAssets[i];
+			Log.Info( $"Importing '{quixelAsset.Name}'..." );
+		}
 
-			var queueItem = importQueueCopy[0];
-			var quixelAssets = JsonSerializer.Deserialize<BridgeAsset[]>( queueItem );
+		//
+		// Start compiling
+		//
+		for ( int i = 0; i < quixelAssets.Length; i++ )
+		{
+			var quixelAsset = quixelAssets[i];
+			Log.Info( $"Compiling '{quixelAsset.Name}'..." );
 
-			//
-			// Add to progress window
-			//
-			for ( int i = 0; i < quixelAssets.Length; i++ )
-			{
-				var quixelAsset = quixelAssets[i];
-				var progressBar = Progress.Bar( $"Import '{quixelAsset.Name}'" );
-				progressList.Add( progressBar );
-				progressBar.SetSubtitle( "Waiting..." );
-				progressBar.SetValues( 0.0f, 1.0f );
-			}
+			_ = BridgeImporter.Instance.ImportFrom( quixelAsset );
 
-			//
-			// Start compiling
-			//
-			for ( int i = 0; i < quixelAssets.Length; i++ )
-			{
-				var quixelAsset = quixelAssets[i];
-				var progressBar = progressList[i];
-				progressBar.SetSubtitle( "Importing... (1/2)" );
-				progressBar.SetValues( 0.33f, 1.0f );
-				await Task.Delay( 50 );
+			Log.Info( $"Completed import for '{quixelAsset.Name}'!" );
+		}
 
-				await BridgeImporter.Instance.ImportFrom( progressBar, quixelAsset );
-			}
-
-			//
-			// Play a "success" chime if the queue has more than 1 item in it and the
-			// user has the chime enabled
-			//
-			if ( quixelAssets.Length > 1 && BridgeSettings.Instance.EnableAudio )
-			{
-				var handle = Audio.Play( "quixel_import_success" );
-				handle.Position = Vector3.Zero;
-				handle.ListenLocal = true;
-			}
-
-			await Task.Delay( 1000 ); // Give the user an extra second to see that we completed
-
-			progressList.ForEach( x => x.Dispose() );
-		};
-
-		_ = asyncTask();
+		//
+		// Play a "success" chime if the queue has more than 1 item in it and the
+		// user has the chime enabled
+		//
+		if ( quixelAssets.Length > 1 && BridgeSettings.Instance.EnableAudio )
+		{
+			var handle = Audio.Play( "quixel_import_success" );
+			handle.Position = Vector3.Zero;
+			handle.ListenLocal = true;
+		}
 	}
 
 	private void ListenThread()
@@ -135,6 +114,8 @@ class BridgeServer
 
 					importQueue.Add( clientMessage );
 					queueDirty = true;
+
+					Import();
 				}
 				catch ( Exception )
 				{

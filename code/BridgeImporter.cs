@@ -19,7 +19,7 @@ public class BridgeImporter
 		listener.EndServer();
 	}
 
-	public async Task ImportFrom( Progress.ProgressBar progressBar, BridgeAsset quixelAsset )
+	public async Task ImportFrom( BridgeAsset quixelAsset )
 	{
 		if ( ExportAsset( quixelAsset, out string path ) )
 		{
@@ -29,9 +29,6 @@ public class BridgeImporter
 			{
 				Mesh mesh = quixelAsset.Meshes[i];
 				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" );
-
-				progressBar.SetSubtitle( "Compiling... (2/2)" );
-				progressBar.SetValues( 0.66f, 1.0f );
 
 				// Locate imported s&box asset
 				var engineAsset = AssetSystem.All.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
@@ -45,14 +42,8 @@ public class BridgeImporter
 					// Force a full compile
 					engineAsset.Compile( true );
 
-					Log.Trace( $"Exported to: {engineAsset}" );
-
-					// Highlight in asset browser
-					MainAssetBrowser.Instance.FocusOnAsset( engineAsset );
+					Log.Info( $"Exported to: {engineAsset}" );
 				}
-
-				progressBar.SetSubtitle( "Done." );
-				progressBar.SetValues( 1.0f, 1.0f );
 			}
 		}
 		else
