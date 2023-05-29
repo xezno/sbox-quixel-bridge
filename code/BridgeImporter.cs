@@ -31,7 +31,8 @@ public class BridgeImporter
 				var mdlPath = Path.Join( relativePath, $"{quixelAsset.Name.ToSourceName()}_{quixelAsset.Id}.vmdl" );
 
 				// Locate imported s&box asset
-				var engineAsset = AssetSystem.All.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
+				var assets = AssetSystem.All.ToList();
+				var engineAsset = assets.FirstOrDefault( x => x.Path.NormalizeFilename() == mdlPath.NormalizeFilename() );
 
 				if ( engineAsset == null )
 				{

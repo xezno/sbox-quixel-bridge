@@ -53,7 +53,6 @@ public class ProgressWindow : Window
 		base.DoLayout();
 
 		Content.Size = Size;
-		Content.Height = Content.Children.Where( x => x.Visible ).Sum( x => MathF.Max( x.SizeHint.y, x.MinimumSize.y ) + 1 ) - 1;
 
 		Content.Position = new Vector2( 0, MenuWidget.Height );
 		Size = Content.Position + Content.Size + new Vector2( 0, 4 );
