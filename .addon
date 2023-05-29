@@ -10,5 +10,7 @@
   "ResourcePaths": null,
   "HasCode": true,
   "CodePath": "/code/",
+  "PackageReferences": [],
+  "EditorReferences": null,
   "Metadata": {}
 }
