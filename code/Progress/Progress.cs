@@ -93,14 +93,14 @@ public static class Progress
 			var widget = new Widget( null );
 			widget.SetSizeMode( SizeMode.Default, SizeMode.CanGrow );
 
-			widget.SetLayout( LayoutMode.TopToBottom );
+			widget.Layout = Layout.Column();
 			widget.Layout.Margin = 16;
 			widget.Layout.Spacing = 16;
 			var label = new Label( message );
 
 			widget.Layout.Add( label );
 
-			var footer = widget.Layout.Add( LayoutMode.LeftToRight );
+			var footer = widget.Layout.Add( Layout.Row() );
 			footer.AddStretchCell( -1 );
 
 			bool clicked = false;

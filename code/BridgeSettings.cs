@@ -50,7 +50,7 @@ public class BridgeSettings
 		var jsonInput = File.ReadAllText( SettingsFile );
 		var settings = JsonSerializer.Deserialize<BridgeSettings>( jsonInput );
 
-		settings.ProjectPath ??= Utility.Projects.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
+		settings.ProjectPath ??= EditorUtility.Projects.GetAll().Where( x => x.Active ).FirstOrDefault().GetRootPath();
 
 		return settings;
 	}

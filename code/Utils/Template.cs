@@ -18,7 +18,7 @@ public class Template
 
 	private string FindBasePath()
 	{
-		var addon = Utility.Projects.GetAll().FirstOrDefault( x => x.Config.Ident == "quixel_bridge" );
+		var addon = EditorUtility.Projects.GetAll().FirstOrDefault( x => x.Config.Ident == "quixel_bridge" );
 		return addon.GetCodePath();
 	}
 
