@@ -26,14 +26,14 @@ public partial class SettingsWindow : Dialog
 
 	public void CreateUI()
 	{
-		SetLayout( LayoutMode.TopToBottom );
+		Layout = Layout.Column();
 		Layout.Spacing = 4;
 
 		//
 		// Addon Settings
 		//
 		{
-			var addonSettings = Layout.Add( LayoutMode.TopToBottom );
+			var addonSettings = Layout.Add( Layout.Column() );
 			addonSettings.Margin = 20;
 			addonSettings.Spacing = 8;
 
@@ -41,7 +41,7 @@ public partial class SettingsWindow : Dialog
 				"Export Addon",
 				"The addon where your imports will get sent to",
 				addonSettings,
-				Utility.Projects.GetAll() );
+				EditorUtility.Projects.GetAll() );
 		}
 
 		Layout.AddStretchCell( 1 );
@@ -52,7 +52,7 @@ public partial class SettingsWindow : Dialog
 		// Import Settings
 		//
 		{
-			var importSettings = Layout.Add( LayoutMode.TopToBottom );
+			var importSettings = Layout.Add( Layout.Column() );
 			importSettings.Margin = 20;
 			importSettings.Spacing = 8;
 
@@ -100,7 +100,7 @@ public partial class SettingsWindow : Dialog
 		{
 			var buttons = new Widget( this );
 			buttons.SetSizeMode( SizeMode.Default, SizeMode.CanShrink );
-			buttons.SetLayout( LayoutMode.LeftToRight );
+			buttons.Layout = Layout.Row();
 			buttons.Layout.Margin = 20;
 			buttons.Layout.Spacing = 8;
 

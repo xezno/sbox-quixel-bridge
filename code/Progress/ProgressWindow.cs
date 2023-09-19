@@ -14,7 +14,7 @@ public class ProgressWindow : Window
 		Content = new Widget( this );
 		Content.Size = 1;
 
-		Content.SetLayout( LayoutMode.TopToBottom );
+		Content.Layout = Layout.Column();
 		Content.Layout.Spacing = 1;
 		AdjustSize();
 
