@@ -2,7 +2,7 @@
 
 Layer0
 {
-	shader "complex.vfx"
+	shader "shaders/complex.shader"
 
 	//---- PBR ----
 	F_METALNESS_TEXTURE 1
@@ -24,10 +24,6 @@ Layer0
 	//---- Fog ----
 	g_bFogEnabled "1"
 
-	//---- Lighting ----
-	g_flDirectionalLightmapMinZ "0.050"
-	g_flDirectionalLightmapStrength "1.000"
-
 	//---- Metalness ----
 	TextureMetalness "<#= Metallic #>"
 
@@ -35,6 +31,7 @@ Layer0
 	TextureNormal "<#= Normal #>"
 
 	//---- Roughness ----
+	g_flRoughnessScaleFactor "1.000"
 	TextureRoughness "<#= Roughness #>"
 
 	//---- Texture Coordinates ----
